@@ -1,4 +1,4 @@
-# xfl
+# XFL
 
 XFL/Conduit - 
 a utility for flow-based programming,
@@ -10,7 +10,7 @@ as CMS/TSO Pipelines provides on IBM mainframe systems CMS and TSO.
 An alternate name for the project is "Conduit", provided by
 the late Dave Jones, "Sir Dave the Generous". Other names include
 "[ductwork](ductwork.md)" and "[plenum](plenum.md)". The confusion
-is because to call it mearly "Pipelines" conveys the implication that
+is because to merely call it "Pipelines" conveys the implication that
 it's just shell pipes. But this project is way more than shell pipes.
 
 The XFL tag was provided by IBM,
