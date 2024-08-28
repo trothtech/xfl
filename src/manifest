@@ -1,0 +1,72 @@
+# XFL - POSIX Pipelines
+
+This is the source directory for XFL, POSIX Pipelines
+
+## Manifest
+
+    manifest                    this file
+    configure                   configurator script
+    configure.h                 generated
+    configure.sh                generated
+    makefile.in                 skeleton makefile
+    makefile                    generated
+
+    xfl.h                       header for the project, used by the launcher and all stages
+    xfl.msgs                    message catalog (compatible with CMS) en_US
+    xfllib.c                    library for the project, for the launcher and all stages
+    pipe.c                      primary command (the launcher)
+    xmitmsgx.h                  generated (copied)
+    testfile.txt                as the name implies
+    xfl.spec.in                 skeleton spec file for RPM
+
+    xmitmsgx/configure          configurator script for the message handler
+    xmitmsgx/configure.h        generated
+    xmitmsgx/configure.sh       generated
+    xmitmsgx/makefile.in        skeleton makefile for the message handler
+    xmitmsgx/makefile           generated
+    xmitmsgx/xmitmsgx.c         library for the message handler
+    xmitmsgx/xmitmsgx.h         header for the message handler
+
+    stages/                     see stages/manifest
+    stages/manifest             list of files providing stages
+    stages/configure            configurator script for the stages
+    stages/configure.h          generated
+    stages/configure.sh         generated
+    stages/makefile.in          skeleton makefile for the stages
+    stages/makefile             generated
+    stages/console.c            CONSOLE stage reads stdin and/or writes stdout
+    stages/cons.c               alias for CONSOLE stage
+    stages/literal.c            LITERAL stage inserts literal strings into the stream
+    stages/strliteral.c
+    stages/locate.c
+    stages/nlocate.c
+    stages/buffer.c             BUFFER stage holds all records until end-of-input
+    stages/reverse.c
+    stages/elastic.c
+    stages/count.c
+    stages/fanin.c
+    stages/filer.c              file reader
+    stages/filew.c              file writer
+    stages/filea.c              file appender
+    stages/var.c
+    stages/command.c
+    stages/cp.c
+    stages/cms.c
+    stages/hole.c
+
+# Rexx support
+
+    xflrexx.c                   Rexx interface shim
+    rxstage.rx                  sample stage written in Rexx
+    rxsample.sh                 Rexx demonstration script
+
+# COBOL support
+
+    cobstage.cob                sample stage written in COBOL
+    cobsample.sh                COBOL demonstration script
+
+# Java support
+
+    xfljava.c                   developmental
+
+

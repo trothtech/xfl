@@ -1,0 +1,92 @@
+#
+#
+#         Name: xfl.spec[.in] (RPM spec file)
+#         Date: 2024-06-07 (Fri)
+#               http://ftp.rpm.org/max-rpm/s1-rpm-build-creating-spec-file.html
+#
+#   Build with:
+#               rpmbuild -bb --nodeps xfl.spec
+#
+
+Summary: xfl, POSIX Pipelines, work-alike for CMS Pipelines
+#Copyright: Casita.Net
+
+# The name line defines what the package will actually be called.
+Name: xfl
+Version: %SPEC_VERSION%
+Release: %SPEC_RELEASE%
+License: GPL
+# The group line is used to hold a string that defines how
+# the packaged software should be grouped with other packages.
+Group: Development/Languages
+Source: xfl-%{version}.tar.gz
+
+Prefix: %SPEC_PREFIX%
+#Provides: xfl
+
+URL: https://github.houston.softwaregrp.net/rtroth/ussw/archive/master.zip
+#Buildroot: /tmp/xfl
+# The distribution line identifies the product this package is part of.
+Distribution: Casita.Net
+Vendor: La Casita en la Esquina
+Packager: Sir Santa
+
+%description
+This package provides POSIX Pipelines.
+It offers similar capability for Unix/Linux/POSIX
+to that of the CMS Pipelines package on z/VM systems.
+The generic concept is "flow programming".
+
+# the source has already been fetched
+%prep
+true
+
+# do a 'make install' and this is not needed
+%build
+mkdir -p $HOME/rpmbuild/BUILDROOT/xfl-%SPEC_VERSION%-%SPEC_RELEASE%.%SPEC_UNAMEM%/%SPEC_PREFIX%
+rsync -a -u -x -H -O -S %SPEC_STAGING%/. $HOME/rpmbuild/BUILDROOT/xfl-%SPEC_VERSION%-%SPEC_RELEASE%.%SPEC_UNAMEM%/%SPEC_PREFIX%/.
+
+# we should have done a 'make install' before this step
+%install
+mkdir -p $HOME/rpmbuild/BUILDROOT/xfl-%SPEC_VERSION%-%SPEC_RELEASE%.%SPEC_UNAMEM%/%SPEC_PREFIX%
+rsync -a -u -x -H -O -S %SPEC_STAGING%/. $HOME/rpmbuild/BUILDROOT/xfl-%SPEC_VERSION%-%SPEC_RELEASE%.%SPEC_UNAMEM%/%SPEC_PREFIX%/.
+
+# The %files section is a list of the files that comprise the package.
+# If it isn't in the file list, it won't be put into the package.
+%files
+%SPEC_PREFIX%/bin/pipe
+%SPEC_PREFIX%/lib/libxflrexx.so
+%SPEC_PREFIX%/lib/libxfl.a
+%SPEC_PREFIX%/libexec/xfl/buffer
+%SPEC_PREFIX%/libexec/xfl/command
+%SPEC_PREFIX%/libexec/xfl/console
+%SPEC_PREFIX%/libexec/xfl/cp
+%SPEC_PREFIX%/libexec/xfl/fanin
+%SPEC_PREFIX%/libexec/xfl/filer
+%SPEC_PREFIX%/libexec/xfl/filew
+%SPEC_PREFIX%/libexec/xfl/literal
+%SPEC_PREFIX%/libexec/xfl/locate
+%SPEC_PREFIX%/libexec/xfl/nlocate
+%SPEC_PREFIX%/libexec/xfl/reverse
+%SPEC_PREFIX%/libexec/xfl/rxsample
+%SPEC_PREFIX%/libexec/xfl/strliteral
+%SPEC_PREFIX%/libexec/xfl/var
+%SPEC_PREFIX%/include/xfl.h
+%SPEC_PREFIX%/share/locale/en_US/xfl.msgs
+#%SPEC_PREFIX%/share/doc/
+#%SPEC_PREFIX%/sbin/xflivp.sh
+#%SPEC_PREFIX%/src/xflivp.c
+#%SPEC_PREFIX%/src/*.h
+#%SPEC_PREFIX%/src/makefile
+#/opt/vendor/package/sbin/install.sh
+
+%clean
+# Here is where we clean-up after all the building and packaging.
+true
+
+%post
+# Run the 'install.sh' after the content is deployed.
+#sh /opt/vendor/package/sbin/install.sh
+true
+
+

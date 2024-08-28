@@ -1,0 +1,1081 @@
+*
+*
+*         Name: xfl.msgs
+*               message repository source for POSIX Pipelines (XFL)
+*         Date: 2023-07-07 (Thursday) day after first formal record sent
+*               removed some references to CP/CMS and other z/VM verbiage
+*
+*         Date: 2023-06-12 (Monday) extracted from CMS Pipelines (FPL)
+*               z/VM Version 7 Release 2.0, CMS Level 30, Service Level 2201
+*
+* The next line sets the token introducer.
+& 3
+* It also indicates default number of digits (which we ignore).
+*
+*nnnffllv mmmmmmmmmmmmmmmmmmmmmmmm...
+0001    I ... Running "&1"
+0002    I ... Processing "&1"
+0003    I ... Issued from stage &1 of pipeline &2
+0004    I ... Issued from stage &1 of pipeline &2 name "&3"
+0010    E Extended format parameter list is required
+0011    E Null or blank parameter list found
+0012    E Null pipeline
+0013    E No ending &1 for global options
+0014    E Option &1 not valid
+0015    E Value missing for keyword "&1"
+0016    E Last character is escape character
+0017    E Null stage found
+0018    E POSIX Pipelines incorrectly generated with &1
+0019    W Label "&1" truncated to eight characters
+0020    I Stage returned with return code &1
+0021    E Unable to find EXECCOMM for REXX
+0023    E Impossible record (&1 bytes from X'&2')
+0024    W Descriptor list for program "&1" is not doubleword aligned; it is ignored
+0026    E Error &1 obtaining storage
+0027    E Entry point &1 not found
+0028    I Starting stage with save area at X'&1' on commit level &2
+0029    E Pipelines stalled
+0030    I Stage is in state &1
+0031    I Resuming stage; return code is &1
+0032    I Storage &1 &2
+0033    I Input requested for &1 bytes
+0034    I "&1" called
+0035    I Output &1 bytes
+0036    I Select &1 stream &2
+0037    I Streamnum &1 stream number intersection &2
+0038    I Setting dispatcher exit to X'&1'
+0039    I ... Data: "&1"
+0040    E REXX program &1 not found
+0041    E Request "&1" not valid on service call to &2
+0042    E Entry point missing
+0043    E Null label
+0044    E Label &1 is not valid
+0045    W Stream identifier "&1" truncated to four characters
+0046    E Label &1 not declared
+0047    E Label &1 is already declared
+0048    E Conflicting value for keyword &1: &2
+0049    E Value for keyword "&1" is not acceptable
+0050    E Not a character or hexadecimal representation: &1
+0051    E Missing operand after inputRange(s)
+0052    E Unknown translate table "&1"
+0053    E Odd number of translate pairs
+0054    E Range "&1" not valid
+0055    E No inputRange(s) in list
+0056    E More than 10 inputRanges specified
+0057    E Missing right parenthesis after inputRanges
+0058    E Decimal number expected, but "&1" was found
+0059    E Logical record length &1 is not valid
+0060    E Delimiter missing after string "&1"
+0061    E Output specification missing
+0062    E Command length &1 too long for the system or shell
+0063    E Output specification &1 is not valid
+0064    E Hexadecimal data missing after &1
+0065    E "&1" is not hexadecimal
+0066    E Number &1 is outside the valid range
+0067    E The number is incompatible with "&1"
+0068    E Incorrect OS block descriptor word X'&1'
+0069    E Block size mismatch; &1 bytes read, but block descriptor word contains &2
+0070    E Incorrect OS record descriptor word X'&1'
+0071    E Column number "&1" must be positive
+0072    E Last record not complete
+0073    E Segmentation flags not compatible; previous is X'&1' and current is X'&2'
+0074    E Fixed records not same length; &1 bytes followed by &2 bytes
+0075    E Block size not integral multiple of record length; remainder is &1
+0076    I Waiting on ECB at X'&1': &2
+0077    I Return code &1
+0078    E Record length &1 is too much
+0079    E CCW command code X'&1' is not valid
+0080    E More than 255 conversion triplets specified
+0081    E Incomplete conversion triplet
+0082    E Device address &1 is not hexadecimal
+0083    E Device &1 does not exist
+0084    E Virtual device &1 is not a supported virtual type
+0085    E Virtual device &1 is not a supported real type
+0086    I POSIX Pipelines (XFL) version &1
+0087    E This stage must be the first stage of a pipeline
+0088    E Buffer overflow
+0089    E Return code &1 reading the virtual reader
+0090    E No reader file available
+0091    E Return code &1 from CONSOLE &2 macro
+0092    E More than ten key fields
+0093    E Pipeline not installed as a nucleus extension; use PIPE command
+0094    E Token &1 is not valid for &2
+0095    E Operand &1 is not valid for &2
+0096    E Missing &1 operand
+0097    E Userword for &1 nucleus extension is zero
+0098    E Connector not by itself
+0099    E Connector not at the beginning or the end of a pipeline
+0100    E Direction "&1" not input or output
+0101    E Connector &1 can be specified with ADDPIPE or CALLPIPE
+0102    E Stream &1 not defined
+0103    E Stream &1 not defined
+0104    E Compiler stack overflow
+0105    E Compiler overflow
+0107    E &1 nucleus extension dropped before &2 command is complete
+0108    E Return code &1 from operation &2 on tape &3
+0109    E Keyword &1 is not a valid blocking format
+0110    E Unsupported record in IEBCOPY unloaded data
+0111    E Operand &1 is not valid
+0112    E Excessive options "&1"
+0113    E Required operand missing
+0114    E Block size missing
+0115    E Block size too small; &1 is minimum for this type
+0116    E File type missing
+0117    E File mode "&1" longer than two characters
+0118    E Return code &1 from renaming the file
+0119    E Mode &1 not available or read only
+0120    E Return code &1 from parameter list &2
+0121    E File not found in the active file table
+0122    E Insufficient free storage
+0123    E Not same ADT
+0124    E Error reading file: Length of record is &1 but file has logical record length &2
+0125    E File mode missing
+0126    E File mode * not allowed
+0127    E This stage cannot be first in a pipeline
+0128    E Record format not existing file format &1
+0129    E Error reading file: Premature end of file
+0131    E Specified logical record length does not match existing logical record length &1
+0132    E Stream "&1" already replaced
+0133    E Stream "&1" already prefixed
+0134    E Record is &1 bytes, but format F file record length is &2
+0137    E The string of operands is too long
+0138    E Short circuit not from input to output in &1
+0139    E No connection available to redefine for &1
+0140    E Record longer than specified length &1 bytes
+0141    E XEDIT not active
+0142    E File "&1 &2 &3" is not in the XEDIT ring
+0143    E Return code &1 from XEDIT state
+0144    E Return code &1 from XEDIT operation
+0145    I Requesting &1 on &2 &3 &4
+0146    E File "&1 &2 &3" does not exist
+0147    E File not a proper PDS
+0148    E Directory pointer &1 not compatible with file of size &2
+0149    E Offset is not smaller than modulo
+0150    E Member &1 not found
+0151    E Operand "&1" is not range of characters or a delimited string
+0152    E Block size &1 too large; &2 is the maximum
+0154    E Operating environment not supported by stage
+0155    E "&1" is not three characters or hexadecimal
+0156    E String missing
+0157    E Null string found
+0158    E Modulo must be positive (it is &1)
+0159    E Device &1 no longer exists
+0161    E 64K or more inbound data
+0162    E Return code &1 from NUCEXT
+0163    E Missing keyword INPUT or OUTPUT
+0164    E Direction "&1" not valid or not supported
+0165    E Stream identifier &1 not valid
+0166    E No real device attached for &1
+0167    E You cannot READ from the second reading station
+0169    E Stream identifier missing
+0170    E Prefix or suffix type connector not allowed
+0172    E Help not available for relative message &1; issue PIPE HELP MENU for the Pipelines help menu
+0173    E No stage found to run
+0174    E Stream "&1" is already defined
+0175    E Language table not generated
+0176    E Language "&1" not found
+0177    I Spent &1 milliseconds in &2
+0178    E Stream "&1" is not found
+0179    E Character "&1" is not an ASA carriage control character
+0180    E Character X'&1' is not a machine carriage control character
+0181    E PSW mask and key are X'&1', not X'FFE0' or X'03E0'
+0182    W String "&1" ignored in command
+0183    E Output buffer overflow; &1 required
+0184    E Storage at &1 not released; R12 &2 R14 &3
+0185    E Entry point &1 is not executable
+0186    I &1 MSGLEVEL &2
+0187    E Keyword &1 must be LIFO or FIFO
+0189    I Messages issued: &1
+0190    E The character cannot begin a stage
+0191    E Second character of connector not a period
+0192    I ... Scan at position &1; previous data "&2"
+0193    E Colon missing in connector
+0194    E Parenthesis not supported in connector
+0195    E Pipeline cannot contain only a connector
+0196    E Column ranges must be in ascending order and not overlapping
+0197    E Range shorter than first string
+0198    E Count must be one when first string is null
+0200    E Missing ending parenthesis in expression
+0204    E Too many ending parentheses in expression
+0206    E Expression missing
+0209    E Segment length &1 not 2 or more
+0211    E Second target missing
+0212    E Screen size &1 less than 1920 or greater than 16384
+0215    E File identifier "&1" not complete or too long
+0219    E Input not in correct format (check word is "&1", not "&2")
+0220    E First record not a delimiter: "&1"
+0221    E Incorrect character "&1" in expression
+0222    E Secondary stream not defined
+0223    E Sequence error in output file: &1 to &2
+0224    E Premature end of primary input stream; sequence number &1 not found
+0225    E Sequence &1 not found
+0226    E Sequence field length &1 too long; 15 is maximum
+0227    E Sequence field not present in record; &1 bytes read
+0229    E Sequence error in input stream from &1 to &2
+0230    E Unsupported format "&1"
+0231    E Null variable name
+0232    E Stem or variable name is too long; length is &1 bytes
+0233    E No active EXECCOMM environment found
+0234    E Caller not REXX
+0235    E Variable name is not valid: &1
+0236    E Too much data for variable &1
+0237    E Error code X'&1' (return code &2) from EXECCOMM
+0238    E Record count "&1" not zero or positive
+0240    E Function &1 not supported
+0241    E Record format or logical record length is not valid
+0242    E Too few arguments; &1 is minimum
+0243    E Too many arguments; &1 is maximum
+0245    W Operand &1 ignored
+0250    E Syntax error in expression
+0253    E Data not a NETDATA control record
+0256    I No pipeline specified on &1 command
+0257    E Subcommand environment &1 not found
+0261    E Unable to open &1
+0264    E Too many streams
+0279    E Tape identifier &1 not valid
+0280    E Delimiter 16M or longer
+0281    W Mixed case command verb "&1"
+0282    E Stage cannot be used with ADDPIPE
+0283    W Operand &1 ignored with &2
+0284    E Field or string longer than 16M
+0287    E Number &1 cannot be negative
+0288    I Posting ECB at &1
+0289    E Intervention required on &1
+0290    E Tape &1 is write protected
+0291    E End of tape on &1
+0292    E I/O error on &1; CSW X'&2', CCW X'&3'
+0293    I Sense &1
+0297    E Return code &1 from diagnose X'A8'
+0300    E Namelist does not end
+0301    E No position for last variable
+0302    E Too many variable names specified (&1); maximum is 254
+0303    E Return code &1 from &2
+0304    E ISPF is not active
+0305    E Table &1 is not open
+0307    E Unable to connect to &1
+0308    E system service &1 not valid
+0312    I IPUSER: &1
+0314    E Server &1 is not available
+0315    E Server has not declared a buffer
+0318    E Server machine has too many connections
+0319    E Not authorised to communicate with &1
+0333    E System service &1 is in use
+0334    E FROM value not valid for file of size &1 records
+0335    E Odd number of characters in hex data: &1
+0336    E String length not divisible by 8: &1
+0337    E Binary data missing after &1
+0338    E Not binary data: &1
+0339    E PIPSDEL return code &1
+0340    I IPARML: &1 (R0=&2)
+0341    I . &1: &2 *&3*
+0342    I Path &1 is connected to &2
+0343    E IPAUDIT is not zero: &1
+0345    E Originator &1 severed path &2
+0346    E No message found (id &1)
+0348    I UserData &1
+0350    E Primary key longer than secondary
+0352    E Input record is &1 bytes; it should be &2
+0354    E Return code &1 from SQL, detected in module &2
+0355    I ... RDS: &1 DBSS: &2; &3 rows done; &4
+0356    I ... Message parameter &1
+0357    E SQL RC -934: Unable to find module &1; run SQLINIT
+0358    E SQL RC -805: Access module &1 not found; refer to help for SQL to generate access module
+0359    E SQL object already exists
+0360    E Table &1 does not exist
+0361    I ... SQL processing: &1
+0362    E DESCRIBE followed by "&1"; must be SELECT
+0363    E SQL RC -205: Column &1 not found in &2.&3
+0364    E Unable to obtain help from SQL (return code &1)
+0365    E SQL has no information about &1
+0366    E Too few input streams
+0367    E Use SQL CONNECT TO to identify the subsystem (Reason &1)
+0368    E 10 SQL stages already active
+0369    I ... SQL statement prepared: &1
+0370    E Cursor has been closed
+0371    E ARIRVSTC TEXT is not available; run SQLINIT
+0373    E No SQL stub module or DB2 not present in system
+0374    E DB2 connection using plan &1 already active
+0375    E DB2 already connected to subsystem &1
+0376    E Return code &1 reason &2 from call to DSNALI
+0377    E Subsystem &1 is not defined
+0378    E Plan &1 is not authorised
+0379    E Subsystem &1 is not up
+0380    E Left parenthesis missing
+0381    E Right parenthesis missing
+0382    E Nothing specified within parentheses
+0391    E Unsupported conversion &1
+0392    E Conversion error in routine &2, record &3 (reason code &1); data: "&4"
+0393    E Output field too short to contain field length
+0400    E Delay &1 is not acceptable
+0401    E Input record too short (&1 bytes)
+0402    I Calling Syntax Exit
+0405    E Minimal C program tries to extend DSA
+0406    E Unsupported language code &1 for entry point
+0407    E PLISTART or CEESTART is not present
+0409    E Assert failure &1 at &2
+0410    E ABEND &1 at &2; PSW &3
+0411    I ... In &1; offset &2 in &3
+0412    I ... GPR&1: &2
+0413    I ... Store &1: &2
+0420    E Return code &1 reading or writing block &2 on disk &3
+0421    E File mode &1 more than one character
+0498    E Output descriptor &1 is not valid
+0499    E Output descriptor &1 is not defined
+0500    E Data set &1 is partitioned
+0501    E No data set is allocated for &1
+0502    E Member &1 already selected by allocation
+0503    E Return code &1 obtaining data set control block
+0504    E Data set &1 does not exist
+0505    E Data set &1 is not partitioned
+0506    E DDNAME &1 is permanently concatenated
+0507    E Member &1 not found
+0508    E Output descriptor too long: &1
+0509    E Unacceptable spool file identifier &1
+0510    E Spool ID &1 not found or incompatible with reader
+0511    E Spool file identifier &1 rejected by system
+0512    E Virtual device &1 not a spooled printer
+0513    E Return code &1 reading or writing XAB (parameters &2)
+0514    E Record length &1 is over the maximum 32767
+0515    E Not a decimal range: &1
+0516    E Not a record number or a range of record numbers: &1
+0517    E Record &1 not present in file
+0518    E Record &1 truncated
+0530    E Destructive overlap
+0531    E Word must be 8 characters; it is &1
+0532    E Storage key &1 not acceptable
+0533    E Storage at &1 is protected
+0534    E Storage at &1 is not addressable
+0535    E Program check &1
+0536    E Buffer header destroyed: &1
+0537    I Commit level &1
+0538    I Query state of &1 stream &2
+0539    E Do not connect unused &1 stream &2
+0540    E Command is longer than 132 (&1 characters)
+0541    E VMCF is in use by another stage
+0542    E Unable to communicate with &1
+0543    E Return code &1 from VMCF: &2
+0545    E VMCF message rejected by user &1
+0546    E Input record length &1 is too short; 11 is minimum
+0547    E Record number &1 is beyond end-of-file
+0548    I SEVER function requested for &1
+0549    E Return code &1, reason code &2, R0 &3 from IRXINIT
+0550    E Unable to access variables
+0552    I SHVBLOCK: &1
+0553    E Return code &1 calling IRXSUBCM &2
+0554    E Stream identifier &1 must not be numeric
+0555    I Issue PIPE AHELP PIPE or PIPE AHELP MENU
+0556    E Asterisk cannot end output column range
+0558    E No symbol table available
+0559    E Paging error reading symbol table
+0560    I POSIX Pipelines level &1
+0561    E File &1 is no longer in storage
+0562    E Alternate exec processor &1; return code &2
+0563    W ANYOF assumed in front of &1
+0564    W Range(s) should be before keyword; put more than one in parentheses
+0565    W Stage is obsolete; use &1 instead
+0566    W Use secondary output instead of stack
+0568    I PL/I: &1
+0569    E Path to &1 severed (path &2)
+0571    E Virtual device &1 is in use by another stage
+0572    E Unable to load &1 (EXECLOAD return code &2)
+0573    E Last text unit or GDF order not complete
+0574    E Address is odd
+0575    E Block padded with &1; it should be X'00'
+0576    E Input record is &1 bytes; disk block size is &2 bytes
+0577    E Return code &1 from STIMERM
+0579    E Return code &1 from DYNALOC; reason &2
+0580    I DDNAME allocated: &1
+0581    E >> cannot append to a member
+0582    E Incorrect DSNAME "&1"
+0583    E Incorrect member name "&1"
+0584    I Enter PIPESTOP, PIPESTALL, or immediate pipeline command
+0585    I ECBs posted: &1; hit attention again to stall the pipeline
+0586    I Hit attention again to terminate waiting stages
+0587    E Immediate command &1 is not active
+0590    E User data length is over 62 or odd (it is &1)
+0591    E Return code &1 reason code &2 from BLDL
+0592    E Conflicting allocation for data set &1
+0593    E Shared data set &1 cannot be allocated exclusive
+0594    E Return code &1 reason code &2 from STOW
+0595    E Member name is not allowed for this function
+0596    E Data set name too long: &1
+0597    E Member name or generation too long in DSNAME &1
+0598    E Null member name or generation in DSNAME &1
+0599    E Null DSNAME &1
+0600    E Return code &1 from TGET
+0601    E Return code &1 from STFSMODE
+0602    E Unsupported data set organisation &1
+0603    E Unable to read directory for member &1
+0604    E Null DDNAME
+0605    E DDNAME longer than 8 characters: &1
+0606    E Null member name in DDNAME &1
+0607    E Member name too long in DDNAME &1
+0608    E Incorrectly specified DSNAME &1
+0609    E ABEND &1 reason code &2
+0611    E Cannot set CONSOLE exit
+0612    I Parmlist: &1
+0613    E Pipeline specification is not issued with CALLPIPE
+0614    E Caller's current input stream is not connected
+0615    E Caller's producer is not connected to caller
+0616    E Caller's producer is not blocked waiting for output
+0617    E File does not have fixed format records; do not specify &1
+0620    W Unsupported code page &1
+0621    W Impossible target string
+0622    E Mask and string are not the same length
+0623    E Unrecognised relational operator &1
+0624    E Premature end of expression
+0625    E Target expression missing
+0626    E Target data missing for &1
+0627    E Null program read from stream
+0635    E Option &1 conflicts with option &2
+0636    E Error in encoded pipeline specification; reason code &1
+0637    E Return code &1 on IDENTIFY for &2
+0638    I SVC 99 parameter list &1
+0639    E Scaling allowed with packed data only
+0640    I Text unit &1 &2
+0641    I Last connected output stream severed by its consumer
+0642    E ZONE already specified
+0643    E HLASM not found in storage
+0644    E Timestamp &1 not valid; reason code &2
+0650    E system service &1 is in use by another program
+0651    E DCSS &1 is not loaded
+0652    E DCSS name &1 does not match the DCSS name already established
+0653    E Monitor is currently running in shared mode; exclusive request rejected
+0654    E Monitor is currently running in exclusive mode; shared request rejected
+0655    E Not a named saved segment: &1
+0656    E Connection to &1 severed with code &2
+0657    E Limit of connections to &1 is reached
+0658    E Too many concurrent STIMERM requests
+0659    E Return code &1 from LINEWRT macro
+0660    E Unsupported code page &1
+0661    E Please ask nicely
+0662    E Environment already specified (&1 is met)
+0663    E Unable to generate delimiter for &1
+0664    E Keyword is not supported when stage is first: &1
+0665    E Exponent is not valid: &1
+0666    E Syntax error in expression; reason code &1
+0667    E Arithmetic overflow
+0668    E Divisor is zero
+0670    E Picture longer than 255 characters: &1
+0671    E Unacceptable character &1 in picture &2
+0672    E Unacceptable picture &1; &2 is incorrect (reason code &3)
+0673    E Picture has more than one V: &1
+0674    E Unacceptable drifting sign in picture &1
+0675    E Unacceptable zero suppress/protect in picture &1
+0676    E No digits selected in picture &1
+0677    E No exponent digits in picture &1
+0678    E More than fifteen exponent digits in picture &1
+0679    E Exponent too large: &1
+0680    E Record length is zero
+0681    E Input record length (&1) is over the maximum allowed (&2)
+0682    I TXTunit list &1
+0683    I STAX return code &1
+0684    E Unsupported system variable &1
+0685    E OpenExtensions is not available (reason code &1)
+0686    E OpenExtensions return code &1 reason code &2 function: &3
+0687    E Relational operator expected; found &1
+0688    I CSW &1; last CCW &2; some data &3
+0689    E Workstation file is missing: &1
+0690    E Logical drive was not found: &1
+0691    E Directory is missing: &1
+0692    E No diskette in drive: &1
+0693    I Packages sent: &1; packages received: &2
+0694    E Pipeline is not called from a driving program
+0695    E Fitting already defined: "&1"
+0699    E Return code &1 from &2 (file: &3)
+0700    E File descriptor &1 is not open (reason code &2)
+0701    E File or directory does not exist (path "&1" reason code &2)
+0702    I ... Parameter: &1
+0703    I Opening "&1"
+0704    E A component of path is not a directory (path "&1", reason code &2)
+0705    E Last character is a slash (path "&1")
+0706    E File system is quiescing (path "&1")
+0707    E Component in path name is too long: path "&1"
+0708    E Path name is too long: path "&1"
+0709    E Unsupported file type &1 (path "&2")
+0710    E Unsupported file type &1 (file descriptor "&2")
+0711    E Function not supported: &1
+0712    E Path name is missing from the input record
+0713    E Mode is not valid: &1
+0714    E Unacceptable interval &1
+0715    E Not octal: &1
+0716    E Not a dotted decimal network address: &1
+0718    I Returning to application
+0719    I Resuming pipeline
+0720    I Terminating pipeline
+0721    I RPL &1
+0722    I Resolved fitting &1
+0723    I Fitting &1 not resolved
+0724    I Posting fitting &1 with &2
+0725    I Returning to the pipeline dispatcher
+0726    I No RPLs changed state
+0727    I &1
+0728    I &1 &2
+0729    I Letting dispatcher wait
+0730    E No data sets found matching &1
+0731    E Return code &1 from SVC 26
+0732    E Return code &1 from DMSCSL
+0733    E Return code &1 reason code &2 from &3
+0734    E CSL Routine &1 is not loaded
+0735    E Callable Services are not available
+0736    E Too few parameters in call to &1 (&2 found)
+0737    E Too many parameters in call to &1 (&2 found)
+0738    E Router did not resolve entry point
+0740    E File "&1" does not exist or you are not authorised for it
+0741    E Record format "&1" is not supported
+0742    E Incorrect file "&1" (reason code &2)
+0743    I File "&1"
+0744    I Open flags &1
+0745    E Existing record length is not &1
+0746    E File &1 is open with incompatible intent
+0747    E Not authorised to read &1
+0748    E Disk &1 is full
+0749    E File &1 is on OS or DOS minidisk
+0750    E Incorrect input block format
+0752    E No default file pool defined
+0753    E NAMEDEF too long in &1
+0754    E Improper use of stage; reason code &1
+0755    E Offset not shorter than width
+0756    W Use the := assignment operator instead of =
+0757    W Use the ¬ operator instead of !
+0758    W Do not double up relational operators
+0759    E Incompatible types
+0760    E No data will be available for input field
+0761    E Different key fields not allowed with AUTOADD
+0762    E Return code &1 reason code &2 from TSO
+0763    E File token &1 is not valid (reason code &2)
+0764    E Timestamp too short:&1
+0765    E Timestamp too long:&1
+0766    E Century incorrect in timestamp: &1
+0767    E Not numeric character in timestamp: &1
+0768    E Incorrect record in file; reading record &1
+0769    E SYSOUT Class &1 is not a letter
+0770    E Period missing in destination &1
+0771    E Leading period in destination &1
+0772    E Ending period in destination &1
+0773    E Node &1 is not defined to JES
+0774    E Syntax error: &1
+0775    E Incorrect file name &1
+0776    E Incorrect file type &1
+0777    E Incorrect file mode number &1
+0778    E Forbidden character in file name or file type &1
+0779    E Incorrect directory &1
+0780    E You are not allowed to write to &1
+0781    E Incorrect file token &1
+0782    E Open intent is incompatible with stage position (intent is &1)
+0783    E Storage group space limit exceeded
+0784    E Space quota exceeded
+0785    E DMSOPBLK is not supported
+0786    E Specified work unit does not exist
+0787    E Too much ESM data (&1 bytes)
+0788    E File pool is not available
+0789    E SAFE can be specified only for PRIVATE work unit
+0790    E File locked by other user or other unit of work
+0791    E File was committed by other user or other unit of work
+0792    E Fitting placement incompatible with RPL
+0793    E Initial RPL state is not valid: &1
+0794    E More than one RPL refers to stage
+0797    E Program check code '&1'x on TIO to communications device
+0798    I Forcing pipeline stall
+1000    E Secondary vector too short for &1 or entry not present; install current Pipelines release
+1010    E VMCF CVT not found
+1014    E IPAUDIT &1
+1015    E ERRNO &1: &2
+1016    I Reason: &1:
+1017    E Unable to connect to &1
+1018    I ... &1: &2 &3
+1019    E Input record is shorter than 24 bytes (it is &1)
+1020    E Socket operation cancelled (message is purged)
+1021    I Path &1 is connected for &2
+1022    I IPARML: &1 (R0=&2)
+1023    E All application slots in use
+1032    E Not a valid field identifier: &1
+1033    E Field &1 is not defined
+1036    E Field &1 is already defined
+1037    E Field identifiers cannot be defined in break items
+1038    E Not a decimal number: "&1"
+1039    E Counter overflow
+1040    E Hex data too long (&1 bytes)
+1041    E Multiplication overflow
+1048    E Data not packed decimal: X'&1'
+1049    E More than one decimal point in data: &1
+1050    E Counter contains more digits than picture: &1
+1074    E Too many nested IFs
+1075    E THEN expected; &1 was found
+1076    E Unexpected keyword: &1
+1077    E ENDIF expected; &1 was found
+1078    E Function does not support arguments; &1 was found
+1079    E Function requires one-character argument; "&1" was found
+1080    E Incomplete IF
+1081    E Unexpected character &1
+1082    E Missing colon
+1083    E Assignment is not to a counter
+1084    E BREAK items are not allowed after EOF item
+1085    E Counter number expected
+1086    E Improper operand for string expression
+1087    E String operand not acceptable to operator
+1088    W Last operation is not assignment
+1089    E Too many counters
+1090    E Unrecognised operator &1
+1091    E Operator expected; found &1
+1100    E Record descriptor is too small (it contains &1)
+1110    I Received &1 bytes
+1111    I Sent &1 bytes
+1112    I Closing socket (reason &1)
+1115    I Socket call for &1
+1120    E Stage cannot run in subset mode
+1121    E Stage cannot run while DOS is ON
+1122    E Expression result is a string: &1
+1123    E Unacceptable input record length &1
+1124    E Incorrect NAMEDEF &1 (a directory name must contain a period)
+1125    E No space left in PDS directory
+1126    E Record descriptor indicates &1 bytes, but minimum is &2
+1127    E Host name too long: &1
+1128    E Two consecutive periods in host name: &1
+1129    E Component of host name too long: &1
+1130    E Variable &1 is not defined in file &2
+1131    E Name server on port &1 at &2 timed out
+1132    E Name server response is truncated
+1133    E Name server query in wrong format
+1134    E Host &1 does not exist
+1135    E Host &1 does not exist
+1136    E Return code from name server: &1
+1137    E Unexpected response record type: &1
+1138    E Unsupported RESOLVEVIA: &1
+1139    I Query summary state of streams
+1140    E Unable to resolve &1 (RXSOCKET is not available)
+1141    E Unable to resolve &1 (RXSOCKET did not return a result)
+1142    E Unable to resolve &1 (RXSOCKET error &2)
+1143    E Unable to resolve &1 (RXSOCKET Version 2 is required)
+1144    E Key/ID field is not anchored at the extremities of the input record (&1 before; &2 after)
+1145    W PIPE command was issued from XEDIT, which truncates at or before 255 characters (use Address Command in XEDIT macros)
+1146    E Expect OF; found: &1
+1147    E Creation time cannot be changed for an existing file
+1148    E Expected parameter token "sysv"; found "&1"
+1149    E Too many parameter tokens found (second is "&1")
+1150    E Lost race for SCBWKWRD
+1161    E Unable to load module &1 (return code &2)
+1162    E Unable to find module &1
+1163    E Unable to declare exit
+1164    W Variable &1 is not valid: &2
+1165    E Configuration variable &1 is not recognised
+1166    E Keyword &1 is not recognised for configuration variable &2
+1167    I Cannot load message repository &1
+1168    E Cannot convert relative date format &1 to absolute date format &2
+1169    E Variable &1 is not a token set by SCANRANGE (reason code &2)
+1170    E The input date is not valid: &1 (reason code &2)
+1171    W No output date format specified; the default output date format is the same as the input date format
+1172    I Restoring fitting name &1
+1173    I No RPL to restore
+1174    E Not a hexadecimal address &1
+1175    E Incorrect check word in PIPEBLOK: &1
+1176    W The pointer to the Contents Vector table is destroyed (reason code &1); investigate VM61261
+1177    E The system does not support date format &1
+1178    W The pointer to the Contents Vector table has been restored from the alternate pointer
+1179    W The alternate pointer to the Contents Vector table has been restored from the primary pointer
+1180    E A directory in the path &1 does not exist or you are not authorised for it
+1181    E Directory control directory &1 is accessed read only
+1182    E Date format &1 cannot be used as an input date format
+1183    E Date cannot be converted; input date &1 is not valid
+1184    E Input date &1 cannot be expressed in the output date format
+1185    E Cannot convert absolute date format &1 to relative date format &2
+1186    W Operand &1 is ignored for input date format &2
+1191    I Close flags &1
+1192    I Close flags &1; record length &2, count &3
+1193    I Current input stream &1 has record available
+1194    I Producer on input stream &1 has record available
+1195    I Selecting input stream &1
+1196    E Do not connect unused input stream &1
+1197    E Do not connect unused output stream &1
+1198    I Stage is active
+1210    I Request for &1 doublewords unsuccessful (from &2)
+1211    I Got &1 doublewords at &2
+1212    I Rel &1 doublewords at &2
+1213    E Storage at &1 is not on allocated chain
+1214    E Storage at &1; check word at &2 is destroyed
+1215    E Storage at &1 allocated &2 doublewords; releasing &3
+1216    E Storage at &1; check word is destroyed
+1217    I Contents: &1
+1220    E IEANTRT RC=&1 not equal to R15 (=&2)
+1221    I The TSO Pipelines name/token is not established
+1222    E IEANTRT RC=&1
+1223    E Nametoken field &1 contains &2; expect &3
+1224    I TSO Pipelines global area is at &1
+1225    E ABEND &1 accessing the global data area
+1226    E Global area is corrupted
+1227    E Insufficient data returned by DMSGETDI; got &1 expect &2
+1228    I Return code &1 erasing work file
+1229    E Length code &1 is not valid
+1230    E Expect "begin", found &1
+1231    E Expect "end", found &1
+1232    E Native sockets are not available (reason code &1)
+1233    E ERRNO &1 reason &2 in &3
+1234    I Attention exit disabled. Hit attention to terminate command
+1235    I Reason Code &1 (hex) &2 (decimal)
+1236    I USS return code &1 reason &2 function: &3
+1237    I Active process and thread IDs:&1 (hexadecimal)
+1238    I Shutting down for write
+1239    I About to receive from socket
+1240    I Unknown system command: &1
+1241    I Suppressed system command: &1
+1242    I STOPECB &1 called
+1243    T PSTV at &1 corrupt: &2
+1244    E Input record contains incorrect data for ASCII quoted-printable format: X'&1'
+1245    E You need pipeline version &1 for this stage
+1246    E You need a more modern VM (interrupt code &1)
+1247    E Incorrect selector value specified (interrupt code &1)
+1249    E Requested SYSIB information not available
+1250    E Incorrect code point X'&1' in first byte
+1251    E Incomplete UTF-8 multibyte character
+1252    E Incorrect code point X'&1' in second byte
+1253    E Address X'&1' before section base
+1254    E Incorrect device number &1 (larger than FFFF)
+1256    E Cylinder number &1 beyond disk capacity &2
+1257    E Track number &1 beyond cylinder capacity &2
+1258    E Number of tracks &1 beyond remaining device capacity &2
+1259    E Volume does not have label specified
+1260    E Ending cylinder (&1) lower than the beginning one
+1261    E Input record too long (it is &1)
+1264    E Incorrect home address X'&1'
+1265    E Incorrect record 0 count field X'&1'
+1266    E Missing end of track marker
+1267    E Device number &1 is read only
+1268    E Too many records on track (&1)
+1269    E Spurious end of track marker
+1270    E Record zero missing
+1271    W Using obsolete version of &1 &2
+1272    E Unable to find DMSEXI
+1273    E Count area incomplete (&1 bytes available)
+1274    E Record incomplete (&1 bytes available; &2 bytes required)
+1275    I Processing cylinder &1 track &2 record &3
+1276    E Buffer length is not valid (&1 doublewords requested)
+1277    E Record length (&1) is not 8+keylength+datalength (&2)
+1278    E Track number is not specified in input record &1
+1279    E No messages in queue, but interrupt received.
+1281    E Unsupported message format
+1282    E Error &1 on HNDIO
+1283    E More than &1 CCWs in input record
+1284    E Subchannel for device number &1 is busy
+1285    I Input stream &1 is only stream connected
+1286    E SF4 is not specified
+1287    E Server responds without SF4
+1288    I Branch to zero probably from &1
+1289    E Third level interrupt exit is already set at &1
+1291    I The field ADMSCWR in NUCON is incorrect; found &1; display of ABEND information may be in jeopardy
+1296    I Fault in system command. Last &1 lines of output follow
+1297    I Trace table at &1
+1298    E Binary number too large for counter (reason &1)
+1299    W &1 duplicate masters were discarded
+1300    E Time zone offset &1 is not valid (86399 is max)
+1301    E Not a built-in function: &1
+1302    E Leftmost word of 32-bit counter &1 is not zero (&2)
+1303    E Function name expected, but identifier found: &1
+1306    E First record on track not 5 bytes long (it is &1)
+1307    E Track capacity exceeded
+1308    I Device &1 is busy or has interrupt pending
+1309    E Undefined return code &1 from Diagnose A8 on device &2
+1310    I Device &1 has unsolicited status pending
+1311    I Not squished track reason &1
+1312    E Filter package &1 is already loaded
+1313    E PTF filter package &1 is already loaded
+1314    E Unable to load module &1 (return code &2)
+1315    E Filter package &1 has bad eye-catcher &2
+1316    E Filter package &1 is not loaded
+1317    E Filter package &1 is not loaded by FILTERPACK LOAD
+1318    E Filter package &1 is in use by &2 stages
+1319    E Filter package cannot be loaded globally (task is not job step)
+1320    E Module &1 contains a type 1 filter package; run it as a command to install
+1321    I Assembler requests &1 bytes output for record &2 on stream &3
+1322    I Ignoring HALT at &1
+1323    E Expression evaluated to the string "&1"
+1324    E Expression evaluated to the number "&1"
+1325    E Unrecognised option &1
+1326    E Pad is not a single character (it is &1)
+1327    E Scanner jammed in state &1 in start condition &2
+1328    E There is no default for the type argument
+1329    E Attempt to extract the square root of a negative number
+1330    E Return code &1 on diagnose E0 subcode &2
+1331    E SPOOL file &1 does not exist
+1334    E SPOOL file &1 is in use
+1335    W Concatenated data set(s) for DD=&1 ignored. Use QSAM instead
+1336    E Reason &1 on &2: &3
+1337    E Expect CSQN205I; received &1
+1338    E ABEND &1 reason &2 on LOAD of &3
+1339    E Error opening &1 for &2
+1340    E &1
+1341    I &1 &2
+1342    I &1 &2 &3
+1343    I &1 &2 &3 &4
+1344    I &1 &2 &3 &4 &5
+1345    I &1 &2 &3 &4 &5 &6
+1346    I &1 &2 &3 &4 &5 &6 &7
+1347    I &1 &2 &3 &4 &5 &6 &7 &8
+1348    I &1 &2 &3 &4 &5 &6 &7 &8 &9
+1349    I &1 &2 &3 &4 &5 &6 &7 &8 &9 &10
+1350    E Already connected to queue manager &1
+1351    E Key length &1 is not valid
+1352    E Cipher Message instruction not available
+1353    E Cipher functions are not available &1
+1354    E Computed output column is not positive (it is &1)
+1355    E Unable to convert to integer. &1 digits in fraction
+1356    E Unable to convert to integer: &1
+1357    E Unable to convert to integer. Exponent too large. (&1)
+1358    W Global lock held by R12=&1 R14=&2
+1359    E Record length &1 not multiple of cipher block size &2
+1360    E Degenerate Triple DES key
+1361    E IEWBFDAT code &1 returns code &2 reason X'&3'
+1362    E Unable to load module &1 (ABEND code &2 reason &3 cause &4)
+1363    E Odd string length &1
+1364    W Member &1 has no sections
+1365    E Warp &1 not registered
+1366    E Warp &1 already registered
+1367    E Warp &1 no longer registered
+1368    E Format character '&1' not valid
+1369    E IDR record does not begin X'80'; found X'&1'
+1370    E IDR record indicates &1 bytes present, but record is &2
+1371    E Improper IDR language processor flag byte X'&1' at offset &2
+1372    E Improper control record prefix &1
+1373    E Control record requests &1 bytes, but only &2 bytes are available
+1374    E CESD IDs descending &1 follows &2
+1375    E CTL or RLD record expected, but found &1
+1376    E RLD record expected, but found CTL &1
+1377    E CTL record found as record X'&1', but count is X'&2'
+1378    E Installation validation routine rejected SVC 99
+1379    E Unexpected return code X'&1' on SVC 99
+1380    E Data set &1 is not a program library; member &2
+1381    I Pipeline &1 committed to &2 worst return code &3
+1382    E Tertiary stream not defined
+1383    E Unexpected EOF on primary input
+1384    E Structure name expected; found &1
+1385    E Structure &1 is empty
+1386    E No structure name found
+1387    E Incorrect first character in identifier: &1
+1388    E Structure already defined: &1
+1389    E Member already defined: &1
+1390    E Incomplete member definition: &1
+1391    E "&1" is not valid in identifier &2
+1392    E Structure not defined: &1
+1393    E No structures defined in pipeline set
+1394    E Structure still in use: &1 (&2 users)
+1395    E Unqualified member name: &1
+1396    E Incomplete inputRange &1
+1397    E Missing identifier in qualified name: &1
+1398    E Member &1 not defined in structure &2
+1399    E Member name further qualified with &1
+1400    E Structure not further qualified: &1
+1401    E Qualifier contains member: &1
+1402    E No structures defined in thread
+1403    E Premature end of expression; term expected
+1404    E Floating point number too short (length &1)
+1405    E Floating point number too long (length &1)
+1406    E Fixed number needs at least &1 columns
+1407    E Exponent overflow (&1)
+1408    E Length of output member (&1) is above maximum &2
+1409    E Counter exponent out of range for hexadecimal: &1
+1410    E No record read from stream &1
+1411    E Too few streams are defined; &1 are present, but three streams are needed
+1412    E Allocation would require more than two gigabytes
+1413    E Found &1 columns
+1414    E Found &1 rows
+1415    E Record length &1 is not a multiple of four (stream &2)
+1416    E Null record read from stream &1
+1417    E String length cannot be negative: &1
+1418    E String position cannot be zero
+1419    E Too few arguments in function call
+1420    E Too many arguments in function call
+1421    E DO expected; &1 was found
+1422    E DONE expected; &1 was found
+1423    E Incomplete WHILE
+1424    E Counter underflow
+1425    W Use parentheses when using the result of an assignment: &1
+1426    I ... Evaluating "&1"
+1427    E Exponent out of range: &1
+1428    E Member &1 has no type
+1429    E Member &1 has unsupported type &2
+1430    E Not hexadecimal: X'&1'
+1431    E Member name longer than 16M (it is &1)
+1432    E Bad placement option &1
+1433    E Computed output length is negative (it is &1)
+1434    E Parse error in state &1, unexpected &2 at offset &3: "&4"
+1435    I Expecting &1
+1436    E FIXED specified, but no record length specified and no input
+1437    E Previous member did not establish a position for &1
+1438    I Incorrect text unit type X'&1'
+1439    E Left hand operand is a string
+1440    E Right hand operand is a string
+1441    I ... Processed &1 structures and &2 members in next structure
+1442    E Both ranges specify same length as other &1
+1443    E Comma list is available only with equal compares
+1444    E Comma list is not available with implied length
+1445    I Error in call to &1: &2
+1446    E String contains leading or trailing blank: "&1"
+1447    E String contains blank not on byte boundary: "&1"
+1448    E String contains a character that is not hexadecimal &1: &2
+1449    E Pad character is a string, not a single character: &1
+1450    E Option string is null
+1451    E Option string is not valid for function: &1
+1452    E Argument is a string, not a single character: &1
+1453    I Trap issued the command "&1"
+1454    E Not valid packed data &1
+1455    E Output field is &1 bytes, but packed number requires &2 bytes to avoid truncation
+1456    E Scale not numeric: &1
+1457    E Scale out of bounds: &1 (-32768 to 32767 is valid range)
+1458    E Semicolon expected; found &1
+1459    E Plus or minus expected; found &1
+1460    E Incomplete pattern
+1461    E Missing pattern at &1
+1462    E Comma expected; found &1
+1463    E No matching specified
+1464    E Odd number of nibbles (&1) in pattern: &2
+1465    E Missing number at end of pattern: &1
+1466    E Pattern longer than 32767 bytes
+1467    E Expect >; found &1
+1468    E Semicolon, colon, or comma expected; found &1
+1469    E Unexpected end of module &1
+1470    E CCW length &1 differs from record length &2 module &3
+1471    I Unrecognised STOP parameter: &1
+1472    I Unrecognised PIPMOD immediate command: &1
+1473    I Unable to obtain global lock; held by &1
+1474    I Global &1
+1475    I Thread &1
+1476    I Header &1
+1477    I Vector &1
+1478    I Stage &1
+1479    I Running: &1
+1480    I In procedure &1
+1482    I Stage is in the dispatcher; likely to stop on the way out.
+1483    I Stage is flagged to stop. PSW in wait/free storage management.
+1484    I Stage is flagged to stop. It is not summarily stoppable
+1485    I Stage is flagged to stop. I/O old PSW and IOPSW fields are not the same. Type B to continue
+1486    I Stage is flagged to stop. Forcing exit from &1
+1487    E Checksum field in column &1 is not within record length &2
+1488    E Convert index &1 is not implemented
+1489    E Unable to convert from negative to unsigned
+1490    I Processing item number &1: &2
+1491    E Field identifier specified, but no further operands are present
+1492    E Field identifier specified, but no valid range found: &1
+1493    E Too few streams are defined; &1 are present, but &2 are required
+1494    E Equal sign expected; end of member found
+1495    E Equal sign expected; found &1
+1496    E Number expected; end of member found
+1497    E Comma or right parenthesis expected; end of member found
+1498    E Comma or right parenthesis expected; found &1
+1499    E Member &1 is a manifest constant
+1500    E Member &1 is not a manifest constant (it is a data member)
+1501    E Right parenthesis expected after array bound; found &1
+1502    E Word-style not supported with an array
+1503    E Array size is greater than 2G
+1504    E Index missing for member &1
+1505    E Right parenthesis expected after index
+1506    E Index &1 is out of bounds (&2)
+1507    E Cannot access entire varying bounds array &1
+1508    E Member &1 is an array
+1509    E Member &1 is a scalar
+1510    E Index &1 is not positive
+1511    E Incomplete subscript in &1
+1512    E "&1" is not valid in subscript of identifier &2
+1513    E Expect period after subscript of identifier &1; found &2
+1514    E Subscript "&1" is not valid in identifier &2
+1515    E Top level structure "&1" cannot be subscripted
+1516    E Last character of identifier is a period: &1
+1517    E No active qualifier for &1
+1518    E No identifier found
+1519    E Address space name longer than 24: &1
+1520    E Return code &1 on ADRSPACE/ALSERV/MAPMDISK diagnose
+1521    E ALET &1 is not valid
+1522    E Virtual machine is not in XC mode
+1523    E ASIT &1 is not valid
+1524    E VCIT &1 does not represent a user that is logged in
+1525    E User &1 is not logged on
+1526    E Virtual machine may not share address spaces
+1527    E Address space &1 is not available for user &2
+1528    E Address space name &1 is not valid
+1529    E Address space name &1 already exists
+1530    E Maximum number of address spaces is exceeded
+1531    E Maximum size of address spaces is exceeded
+1532    E Address space size is not valid: &1
+1533    W ASIT &1 is already permitted to user &2
+1534    W ASIT &1 is already permitted to VCIT &2
+1535    E Host access list is full
+1536    W ALET &1 is neither valid nor revoked.
+1537    E Device &1 is not a reserved minidisk
+1538    E Device &1 is not attached
+1539    E Too many ranges to save
+1540    E Page number too large: &1
+1541    E Digit "&1" is not hexadecimal in string &2
+1542    E Hexadecimal string too long: &1
+1543    E No minidisk pool has been defined
+1544    W Dispatcher called with address space control &1
+1545    E Data space ALET &1 is not initialised properly; eye-catcher is &2
+1546    E Data space ALET &1 is in use; lock is &2
+1547    W Data space ALET &1 contains unexpected lock &2
+1548    E Insufficient space in the data space for &1 bytes
+1549    E ALET and PGMLIST are incompatible
+1550    E Data space ALET &1 contains unexpected lock &2
+1551    E Data space ALET &1 is not locked
+1552    E Data space is fetch protected in key &1 (PSW key &2)
+1553    E Data space is write protected in key &1 (PSW key &2)
+1554    E Data space ALET &1 cannot be written
+1555    E Data space ALET &1 is not accessible
+1556    E Input record too short for complete VMCMHDR (&1 bytes available; 40 required)
+1557    W VMCF message arrived, but no listener is active
+1558    E Unsupported VMCF function code &1
+1559    E Structure &1 is not built in
+1560    I Scanned member: &1
+1561    E Counter number &1 is not valid (valid: &2 to &3)
+1562    E Incorrect UTF-&1 X'&2' reason code &3
+1563    E Senary stream is incompatible with &1.
+1564    E Beginning block number &1 larger than device capacity &2
+1565    E Ending block number &1 larger than device capacity &2
+1566    E Record size (&1 blocks) does not agree with block count &2 in record
+1567    E Beginning block &1 is greater than ending block &2
+1568    E Block &1 before first writable block
+1569    E Block &1 after last writable block
+1570    E Mode &1 does not refer to an SFS directory
+1571    E Self-defining is too long (&1 bits): &2
+1572    E Needle cannot be empty
+1573    E Argument &1 is required
+1574    E Number is not an integer: &1
+1575    E First argument to D2C/D2X is negative, but second argument is omitted: &1
+1576    E Stage is not running in a subroutine pipeline
+1577    E No structures defined in caller
+1578    E Cannot obtain lock for COMMAND stage (held by process &1 thread &2)
+1579    W Cannot release lock for COMMAND stage: &1
+1580    E Do not convert numeric type member as if it were a string
+1581    E Trap requested
+1582    I Trap issued the command "&1"
+1584    E Return code 70 renaming the file. Use >SFS instead
+1585    I Invoking command &1 with header &2 at &3 in process &4 thread &5
+1586    I Return from command &1
+1587    E No compression dictionary provided
+1588    E Symbol translation and format-1 sibling descriptors are mutually exclusive
+1589    E Dictionaries provided are &1, but &2 is expected
+1590    E Dictionary size is not a multiple of 4096 (X'&1')
+1591    E Dictionary size is not a power of 2 (X'&1')
+1592    E Dictionary size is too small
+1593    E Dictionary size is too large (&1)
+1594    I Issuing wait to operating system
+1595    E Prologue not recognised (&1)
+1596    W Cannot erase original file renamed to &1. Try SFS device driver instead
+1597    E GLOBALV service not available
+1598    E Incorrect compression signature X'&1'
+1599    E Expansion failed after &1 bytes (reason &2)
+1600    E FTP error: &1
+1601    E Error &1 parsing URL at "&2"
+1602    E Unable to open FTP data connection
+1603    E FTP processing error &1
+1604    i FTP &1 "&2"
+*
+2756    E Too many operands.
+2811    E A stream with the stream identifier specified is already defined.
+*
+3000    I pipeline >>> &1 <<<
+3027    E Entry point is &1 ... found
+3047    I Label &1 is being re-used
+3099    I stage &1 with PID &2 finished
+*
+* plenum: total stages 2 (3 final)
+* plenum: total streams 1
+* plenum: 2 stages launched by parent
+* plenum: 2 connectors closed and freed by launcher
+*

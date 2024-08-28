@@ -1,0 +1,236 @@
+#
+#
+#         Name: makefile (rules file for 'make') from makefile.in
+#       Author: Rick Troth, rogue programmer
+#         Date: 2023-07-07 (Friday) just before Israel
+#         Note: this makefile configured for %SYSTEM%
+#
+#
+
+APPLID          =       xfl
+VERSION         =       0.7.6
+
+#PROJECTURL     =       http://www.casita.net/pub/ductwork/src
+PROJECTURL      =       http://www.casita.net/pub/xfl/src
+LOCALE          =       en_US
+
+##### configuration #####
+
+PREFIX          =       %PREFIX%
+CFLAGS          =       %CFLAGS% -DPREFIX=\"$(PREFIX)\" -I.
+#LDFLAGS        =       %LDFLAGS% -L. -lxfl -lxmitmsgx
+LDFLAGS         =       %LDFLAGS% -L. -lxfl
+SHFLAGS         =       %SHFLAGS%
+# we may later use CC, CXX, CPP, CPPFLAGS, and/or CXXFLAGS
+
+EXE             =       
+OBJ             =       .o
+LIB             =       .a
+DLL             =       .so
+
+# we may later use CC, CXX, CPP, CPPFLAGS, and/or CXXFLAGS
+
+MKAR            =       $(AR) r
+
+##### configuration #####
+
+STAGES          =       buffer cms command cons console count cp \
+                        elastic fanin filea filer filew hole literal \
+                        locate nlocate reverse strliteral var
+
+DELIVERABLES    =       pipe$(EXE) libxfl$(LIB) libxfl$(DLL) xfllib$(OBJ) xmitmsgx$(OBJ)
+
+# identify targets without actual files to match
+.PHONY:         _default all clean distclean veryclean help \
+                libraries stages
+
+# first target serves as the default, but name it that way anyway
+_default:       xmitmsgx$(OBJ) xfllib$(OBJ) stages.tag $(DELIVERABLES)
+
+all:            xmitmsgx$(OBJ) xfllib$(OBJ) stages.tag $(DELIVERABLES)
+
+# pseudo target to build static and shared libraries
+libraries:      libxfl$(LIB) libxfl$(DLL)
+
+# fetch the source from GitHub
+pipe.c:
+		@echo "$(MAKE): you need $@"
+		wget $(PROJECTURL)/$@
+
+#
+pipe$(OBJ):         makefile pipe.c
+		$(CC) $(CFLAGS) -o pipe$(OBJ) -c pipe.c
+
+#
+pipe$(EXE):     makefile pipe$(OBJ) xfllib$(OBJ) xmitmsgx$(OBJ)
+#               $(CC) $(LDFLAGS) -o pipe pipe$(OBJ) xfllib$(OBJ) xmitmsgx$(OBJ)
+                $(CC)            -o pipe pipe$(OBJ) xfllib$(OBJ) xmitmsgx$(OBJ)
+
+# fetch the source from GitHub
+xfllib.c:
+		@echo "$(MAKE): fetching the library source"
+		wget $(PROJECTURL)/$@
+
+#
+xfllib$(OBJ):       xfllib.c xfl.h xmitmsgx.h
+		@echo "$(MAKE): compiling the library ..."
+		$(CC) $(CFLAGS) -o xfllib$(OBJ) -c xfllib.c
+
+#
+libxfl$(LIB):   xfllib$(OBJ) xmitmsgx$(OBJ)
+		@echo "$(MAKE): building the static library ..."
+		@rm -f libxfl$(LIB)
+                $(MKAR) libxfl$(LIB) xfllib$(OBJ) xmitmsgx$(OBJ)
+
+#
+libxfl$(DLL):   xfllib$(OBJ) xmitmsgx$(OBJ)
+                @echo "$(MAKE): building the shared library ..."
+		@rm -f libxfl$(DLL)
+                $(CC) $(SHFLAGS) -o libxfl$(DLL) xfllib$(OBJ) xmitmsgx$(OBJ)
+
+# fetch the source from GitHub
+xmitmsgx.h:
+                $(MAKE) -C xmitmsgx xmitmsgx.h
+                cp -p xmitmsgx/xmitmsgx.h .
+
+#
+xmitmsgx$(OBJ):
+                $(MAKE) -C xmitmsgx xmitmsgx$(OBJ)
+                cp -p xmitmsgx/xmitmsgx$(OBJ) .
+
+##
+#libxmitmsgx$(LIB):
+#               $(MAKE) -C xmitmsgx libxmitmsgx$(LIB)
+#               cp -p xmitmsgx/libxmitmsgx$(LIB) .
+
+#
+plenum$(OBJ):         makefile plenum.c
+		$(CC) $(CFLAGS) -o plenum$(OBJ) -c plenum.c
+
+#
+#plenum:           makefile plenum$(OBJ) xfllib$(OBJ) xmitmsgx$(OBJ)
+#               $(CC) $(LDFLAGS) -o plenum plenum$(OBJ) xfllib$(OBJ) xmitmsgx$(OBJ)
+plenum$(EXE):   makefile plenum$(OBJ) libxfl$(LIB)
+#		$(CC) $(LDFLAGS) -o plenum plenum$(OBJ)
+		$(CC) -o plenum plenum$(OBJ) $(LDFLAGS)
+
+########################################################################
+# standard stages written mostly in C
+stages:         stages.tag
+
+#stages.tag:    libxfl$(LIB)
+stages.tag:     makefile xfllib$(OBJ) xmitmsgx$(OBJ)
+        echo $(STAGES) | xargs -n 1 | awk '{print "make " $$1 "$(OBJ)"}' \
+            | sh -c " cd stages ; xargs | make "
+        @touch stages.tag
+
+list-o-stages:
+        sh -c ' cd stages ; exec ls -d *.c ' | awk -F. '{print $$1}' > list-o-stages
+
+########################################################################
+# Rexx support
+rexx:           libxflrexx$(DLL)
+
+xflrexx$(OBJ):      makefile xflrexx.c xfl.h
+		$(CC) $(CFLAGS) -o xflrexx$(OBJ) -c xflrexx.c
+#		cc    -fPIC     -o xflrexx.o     -c xflrexx.c -I/usr/opt/regina/include
+
+libxflrexx$(DLL):  xflrexx$(OBJ) xfllib$(OBJ) xmitmsgx$(OBJ)
+                $(CC) $(LDFLAGS) -shared -o libxflrexx$(DLL) xflrexx$(OBJ) xfllib$(OBJ) xmitmsgx$(OBJ)
+#               cc               -shared -o libxflrexx$(DLL) xflrexx.o     xfllib.o     xmitmsgx.o
+#               SHFLAGS
+
+########################################################################
+# Java support (JNI)
+java:           xfljava$(OBJ)
+
+com/casita/xfl:
+	        mkdir -p com
+	        rm -f com/casita ; ln -s . com/casita
+	        rm -f com/casita/xfl ; ln -s .. com/casita/xfl
+
+PipelineService.class:  PipelineService.java
+	        @$(MAKE) com/casita/xfl
+	        javac PipelineService.java
+
+com/casita/xfl/PipelineService.java:  PipelineService.java
+	        mkdir -p com
+	        rm -f com/casita ; ln -s . com/casita
+	        rm -f com/casita/xfl ; ln -s .. com/casita/xfl
+
+#
+# this file is for comparison and discarded once xfljava.c is up-to-date
+java.h:          com/casita/xfl/PipelineService.java
+	@echo "$(MAKE): [re]creating the Java signature header"
+#               javah com.casita.xfl.PipelineService
+#               javah PipelineService
+#               javah -jni -o xfljava.h PipelineService.class
+	        javac com/casita/xfl/PipelineService.java
+                javah -jni -o xfljava.h com.casita.xfl.PipelineService
+#               mv com_casita_xfl_PipelineService.h xfljava.h
+
+xfljava.o:      xfljava.c
+        cc -I. -I/usr/lib/jvm/java-1.8.0-openjdk/include -I/usr/lib/jvm/java-1.8.0-openjdk/include/linux -c xfljava.c
+
+########################################################################
+
+#
+# yeah, we need an "install" target
+install:        $(DELIVERABLES) stages.tag
+		@mkdir -p $(PREFIX)/bin $(PREFIX)/lib $(PREFIX)/include \
+		  $(PREFIX)/share/locale/$(LOCALE) $(PREFIX)/sbin $(PREFIX)/libexec/xfl
+                cp -p pipe $(PREFIX)/bin/.
+                cp -p *$(LIB) *$(DLL) xfllib$(OBJ) xmitmsgx$(OBJ) $(PREFIX)/lib/.
+                cp -p xfl.h $(PREFIX)/include
+#
+                sh -c ' cd stages ; exec cp -p $(STAGES) $(PREFIX)/libexec/xfl/. '
+#
+                cp -p xfl.msgs $(PREFIX)/share/locale/$(LOCALE)/.
+# locale alternatives:
+#                              $(PREFIX)/share/locale/$(LOCALE)/$(APPLID).msgs
+#                              $(PREFIX)/lib/nls/msg/$(LOCALE)/$(APPLID).msgs
+#                              $(PREFIX)/lib/locale/$(LOCALE)/$(APPLID).msgs
+#                              $(PREFIX)/share/nls/$(LOCALE)/$(APPLID).msgs
+#
+#               cp -p ...something... $(PREFIX)/sbin/.
+#               cp -p ...something... $(PREFIX)/src/.
+
+#
+makefile:       makefile.in configure
+	@echo "$(MAKE): makefile is out of synch"
+	@echo "$(MAKE): you need to re-run ./configure"
+	@false
+
+# fetch the sources from GitHub
+makefile.in:
+		@echo "$(MAKE): you need $@"
+		wget $(PROJECTURL)/$@
+
+configure:
+		@echo "$(MAKE): you need $@"
+		wget $(PROJECTURL)/$@
+
+# reset things for a fresh build from source
+clean:
+		rm -f *.o *.a *.so *.dylib *.rpm *.class stages.tag \
+		  *$(LIB) *$(DLL) *$(OBJ) pipe$(EXE) plenum$(EXE) cobstage$(EXE)
+                -$(MAKE) -C xmitmsgx clean
+		-$(MAKE) -C stages clean
+
+distclean:      clean
+		@rm -f configure.h configure.sh
+                -$(MAKE) -C xmitmsgx distclean
+		-$(MAKE) -C stages distclean
+
+veryclean:      distclean
+
+help:
+
+
+#
+# 'make' tips:
+# $@ is the target
+# $+ is the list of dependencies but does not work everywhere
+#
+
+

@@ -1,0 +1,69 @@
+#
+#
+#
+#
+#
+
+EXE             =       
+OBJ             =       .o
+LIB             =       .a
+DLL             =       .so
+
+CFLAGS          =       %CFLAGS% -I..
+PREFIX          =       %PREFIX%
+#LDFLAGS        =       %LDFLAGS% -L.. -lxfl -L../xmitmsgx -lxmitmsgx
+#LDFLAGS        =       %LDFLAGS% -L.. -lxfl -lxmitmsgx
+#LDFLAGS        =       %LDFLAGS% -L.. -lxfl
+LDFLAGS         =       ../xfllib$(OBJ) ../xmitmsgx$(OBJ) %LDFLAGS%
+SHFLAGS         =       %SHFLAGS%
+
+.PHONY:  clean distclean veryclean help \
+                all allstages
+
+_default:
+	$(MAKE) allstages
+
+all allstages:
+#	@ls *.c | sed 's#\.c##' | xargs -n 1 $(MAKE)
+	-@for F in ` ls *.c | sed 's#\.c##' ` ; do \
+	  echo "+ $(CC) $(CFLAGS) -o $$F$(OBJ) -c $$F.c" ; \
+	          $(CC) $(CFLAGS) -o $$F$(OBJ) -c $$F.c ; \
+	  echo "+ $(CC) -o $$F $$F$(OBJ) $(LDFLAGS)" ; \
+	          $(CC) -o $$F $$F$(OBJ) $(LDFLAGS) ; \
+	    done
+
+#
+# compile the source to an object deck
+%$(OBJ):    %.c
+        $(CC) $(CFLAGS) -o $@ -c $<
+
+#
+# link the object deck with requisite libraries
+%:      %$(OBJ)
+	$(CC) -o $@ $< $(LDFLAGS)
+#	cc -o literal literal.o $(LDFLAGS)
+#../*$(OBJ) ../xfllib.o ../xmitmsgx.o
+
+#
+# markdown file describing the supplied stages
+Stages.md:      Stages.head.md.in Stages.tail.md.in makefile
+	cat < Stages.head.md.in > Stages.tmp
+	grep '//MD' *.c | awk -F: '{print $$2}' | sed 's#^//MD##' >> Stages.tmp
+	cat < Stages.tail.md.in >> Stages.tmp
+	mv Stages.tmp Stages.md
+
+#
+makefile:  makefile.in
+	@echo "$(MAKE): makefile is out of synch"
+	@echo "$(MAKE): you need to re-run ./configure"
+	@false
+
+clean:
+	rm -f *.o *.a *.so *.dylib *.dll *.exe *.class *.rpm *.tmp \
+          *$(OBJ) *$(LIB) *$(DLL)
+	@ls *.c | sed 's#\.c##' | xargs rm -f
+
+distclean:  clean
+	@rm -f configure.h configure.sh
+
+

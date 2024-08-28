@@ -1,0 +1,57 @@
+# Stages for POSIX Pipelines (XFL)
+
+This is the stages source code directory for POSIX Pipelines (XFL)
+
+## Manifest
+
+    manifest            this file (see counterpart one level up)
+    configure           configurator script
+    makefile.in         skeleton makefile
+    makefile            generated
+    configure.h         generated
+    configure.sh        generated
+
+## Stage Sources that we Have Now
+
+    console.c           read from stdin if first, write to stdout otherwise
+    cons.c              alias for CONSOLE stage
+    literal.c           prepend a record to the stream with the literal string supplied
+    strliteral.c        prepend a record to the stream with the literal string supplied
+    locate.c            find a needle in a haystack
+    nlocate.c           exclude a needle from a haystack
+    buffer.c            hold all records in memory until input closes
+    reverse.c
+    elastic.c
+    count.c
+    fanin.c             gather inputs one at a time
+    command.c           issue commands to the local operating system
+    cp.c                issue a CP or VMCP command (requires z/VM)
+    cms.c               N/A apart from VM/CMS
+    filer.c             file reader
+    filew.c             file writer
+    filea.c             file appender
+    var.c               read a variable from the environment
+    hole.c
+    rxsample            a sample stage written in Rexx
+
+## Stages Defined in the Swift Implementation
+
+    diskr.c             see filer.c
+    diskw.c             see filew.c
+    diskwa.c            see filea.c
+    drop.c
+    faninany.c
+    fanout.c
+    help.c
+    lookup.c
+    regex.c
+    sort.c
+    spec.c
+    take.c
+
+## Stages Yet To Be Written
+
+    xlate.c
+    change.c
+
+

@@ -1,0 +1,132 @@
+#!/usr/bin/env regina
+/*
+ *        Name: rxstage.rx (Rexx script)
+ *              demonstrate POSIX Pipelines (XFL) called from Rexx
+ *        Date: 2024-05-19 (Sun) happy 60th MEN
+ *
+ *        Note: This is a sample Pipelines stage written in Rexx.
+ *              The interface uses the rc + rs return value style
+ *              made popular by Rexx/Sockets. That allows returning both
+ *              code and text without needing supplemental variables.
+ *
+ *              The sample flow here is peekto/output/readto.
+ *              The affect of this stage on the data is no change.
+ *
+ *        Note: This stage can also be run on CMS Pipelines.
+ *              Remove the "#!" first line and change "_xfl:" to "xfl:" below.
+ *
+ */
+ 
+/* what platform are we running on? do we need to load the functions? */
+Parse Source sys . fn .
+If sys = "CMS" Then Do
+  nl = '15'x
+  banner = "CMS Pipelines (FPL)"
+End ; Else Do
+  Parse Value RxFuncAdd('xfl','xflrexx','RxDuctwork') With rc rs
+  If rc <> 0 Then Signal LoadFailed
+  nl = '0A'x
+  banner = "POSIX Pipelines (XFL)"
+End
+ 
+/* announce the sample program */
+Say banner "demonstration stage in Rexx"
+ 
+/* the "VERSION" subfunction can be called at any time w/w/o INIT     */
+cf = "xfl(VERSION)"
+Parse Value xfl("VERSION") With rc rs
+If rc <> 0 Then Signal CallFailed
+/* If rs <> "" Then Say rs */
+ 
+/* initialize the stage logic */
+cf = "xfl(INIT)"
+Parse Value xfl("INIT") with rc rs
+If rc <> 0 Then Signal CallFailed
+/* If rs <> "" Then Say rs */
+ 
+ic = 0; oc = 0; bc = 0
+Do Forever
+ 
+    cf = "xfl(PEEKTO)"
+    Parse Value xfl("PEEKTO",0) with rc rs
+    If rc <> 0 Then Leave
+/*  If rc = 12 Then Leave
+    If rc <> 0 Then Signal CallFailed  */
+    record = rs
+    ic = ic + 1; bc = bc + Length(record)
+ 
+    cf = "xfl(OUTPUT)"
+    Parse Value xfl("OUTPUT",0,record) with rc rs
+    If rc = 12 Then Leave
+    If rc <> 0 Then Signal CallFailed
+    If rs <> "" Then Say rs
+    oc = oc + 1
+ 
+    cf = "xfl(READTO)"
+    Parse Value xfl("READTO",0) with rc rs
+    If rc = 12 Then Leave
+    If rc <> 0 Then Signal CallFailed
+ 
+End /* Do Forever */
+ 
+/* do an orderly shutdown of the library */
+cf = "xfl(QUIT)"
+Parse Value xfl("QUIT") with rc rs
+If rc <> 0 Then Signal CallFailed
+If rs <> "" Then Say rs
+ 
+Say "input records" ic "/ output records" oc "/ bytes" bc
+ 
+Exit
+ 
+/* ---------------------------------------------------------------------
+ */
+LoadFailed:
+Say "### load failed! RC =" rc "###"
+If rs <> "" Then Say "###" rs "###"
+Exit rc
+ 
+/* ---------------------------------------------------------------------
+ */
+CallFailed:
+Say "### call" cf "failed! RC =" rc "###"
+If rs <> "" Then Say "###" rs "###"
+Exit rc
+ 
+/* ---------------------------------------------------------------------
+ */
+_xfl: Procedure
+Parse Arg verb , stream , rest , .
+Upper verb
+ 
+Select /* verb */
+ 
+  When Abbrev("VERSION",verb,4) Then Do
+    'CALLPIPE QUERY VERSION'
+    Return rc
+  End /* When .. Do */
+ 
+  When Abbrev("INIT",verb,1) Then Return 0
+ 
+  When Abbrev("PEEKTO",verb,4) Then Do
+    'PEEKTO RECORD'
+    Return rc record
+  End /* When .. Do */
+ 
+  When Abbrev("OUTPUT",verb,4) Then Do
+    'OUTPUT' rest
+    Return rc
+  End /* When .. Do */
+ 
+  When Abbrev("READTO",verb,4) Then Do
+    'READTO RECORD'
+    Return rc record
+  End /* When .. Do */
+ 
+  When Abbrev("QUIT",verb,1) Then Return 0
+ 
+End /* Select verb */
+ 
+Return 99 "error, blah, blah"
+ 
+ 
