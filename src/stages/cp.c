@@ -29,8 +29,11 @@
 
 #include <xfl.h>
 
+static char _eyeball0[] = "XFL pipeline stage 'cp'";
+
+/* ------------------------------------------------------------------ */
 int main(int argc,char*argv[])
-  { static char _eyecatcher[] = "pipeline stage 'cp' main()";
+  { static char _eyecatcher[] = "XFL pipeline stage 'cp' main()";
     int rc, fd, buflen;
     char *args, buffer[4096], *msgv[4], em[16], *p, *q;
     struct PIPECONN *pc, *pi, *po, *pn;

@@ -36,7 +36,7 @@ MKAR            =       $(AR) r
 
 STAGES          =       buffer cms command cons console count cp \
                         elastic fanin filea filer filew hole literal \
-                        locate nlocate reverse strliteral var
+                        locate nlocate reverse strliteral var take drop
 
 DELIVERABLES    =       pipe$(EXE) libxfl$(LIB) libxfl$(DLL) xfllib$(OBJ) xmitmsgx$(OBJ)
 

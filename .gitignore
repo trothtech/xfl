@@ -1,5 +1,6 @@
-# Prerequisites
-*.d
+
+# "hidden" (dotted) files
+.*
 
 # Object files
 *.o
@@ -11,10 +12,6 @@
 *.ilk
 *.map
 *.exp
-
-# Precompiled Headers
-*.gch
-*.pch
 
 # Libraries
 *.lib
@@ -36,17 +33,4 @@
 *.x86_64
 *.hex
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf

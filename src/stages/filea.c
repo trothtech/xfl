@@ -1,4 +1,5 @@
 #define XFL_STAGE_FILEAPPEND
+static char _eyeball1[] = "XFL pipeline stage 'filea'";
 #include "filew.c"
 
 /*

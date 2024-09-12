@@ -12,12 +12,14 @@
 
 #include <xfl.h>
 
+static char _eyeball0[] = "XFL pipeline stage 'command'";
+
 #define DEVELOPMENT
 
 /* ---------------------------------------------------------- DO1COMMAND
  */
 int do1command(PIPECONN*pp,char*cmd)
-  { static char _eyecatcher[] = "pipeline stage 'command' do1command()";
+  { static char _eyecatcher[] = "XFL pipeline stage 'command' do1command()";
     int buflen, rc;
     char buffer[4096], *s;
     FILE *cf;
@@ -72,8 +74,7 @@ printf("%s\n",buffer);
 
 /* ------------------------------------------------------------------ */
 int main(int argc,char*argv[])
-  { static char _eyecatcher[] = "pipeline stage 'command' main()";
-
+  { static char _eyecatcher[] = "XFL pipeline stage 'command' main()";
     int buflen, rc;
     char *args, buffer[4096];
     struct PIPECONN *pc, *pi, *po, *pn;

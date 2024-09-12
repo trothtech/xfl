@@ -18,9 +18,11 @@ typedef struct BUFFSTRUCT {
     void *next;                /* pointer to next struct in the chain */
                           } BUFFSTRUCT;
 
+static char _eyeball0[] = "XFL pipeline stage 'buffer'";
+
 /* ------------------------------------------------------------------ */
-int main(int*arg,char*argv[])
-  { static char _eyecatcher[] = "pipeline stage 'buffer' main()";
+int main(int arg,char*argv[])
+  { static char _eyecatcher[] = "XFL pipeline stage 'buffer' main()";
     int rc, i, o, reclen;
     char *bp, *bi;
     struct PIPECONN *pc, *pi, *po, *pn;

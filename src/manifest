@@ -12,12 +12,12 @@ This is the source directory for XFL, POSIX Pipelines
     makefile                    generated
 
     xfl.h                       header for the project, used by the launcher and all stages
-    xfl.msgs                    message catalog (compatible with CMS) en_US
+    xfl.msgs                    message catalog (compatible with CMS)
     xfllib.c                    library for the project, for the launcher and all stages
     pipe.c                      primary command (the launcher)
-    xmitmsgx.h                  generated (copied)
-    testfile.txt                as the name implies
-    xfl.spec.in                 skeleton spec file for RPM
+    xmitmsgx.h                  generated
+    testfile.txt
+    xfl.spec.in
 
     xmitmsgx/configure          configurator script for the message handler
     xmitmsgx/configure.h        generated
@@ -34,30 +34,33 @@ This is the source directory for XFL, POSIX Pipelines
     stages/configure.sh         generated
     stages/makefile.in          skeleton makefile for the stages
     stages/makefile             generated
-    stages/console.c            CONSOLE stage reads stdin and/or writes stdout
-    stages/cons.c               alias for CONSOLE stage
-    stages/literal.c            LITERAL stage inserts literal strings into the stream
-    stages/strliteral.c
-    stages/locate.c
-    stages/nlocate.c
+
     stages/buffer.c             BUFFER stage holds all records until end-of-input
-    stages/reverse.c
+    stages/console.c            read from stdin if first, write to stdout otherwise
+    stages/cons.c               alias for CONSOLE stage
     stages/elastic.c
-    stages/count.c
-    stages/fanin.c
-    stages/filer.c              file reader
-    stages/filew.c              file writer
-    stages/filea.c              file appender
-    stages/var.c
-    stages/command.c
-    stages/cp.c
-    stages/cms.c
+    stages/reverse.c
+    stages/literal.c            prepend a record to the stream with the literal string supplied
+    stages/strliteral.c         prepend a record to the stream with the literal string supplied
+    stages/fanin.c              gather inputs one at a time
+    stages/command.c            issue commands to the local operating system
+    stages/cp.c                 issue a CP or VMCP command (requires z/VM)
+    stages/cms.c                N/A apart from VM/CMS
+    stages/locate.c             find a needle in a haystack
+    stages/nlocate.c            exclude a needle from a haystack
+    stages/var.c                read a variable from the environment
     stages/hole.c
+    stages/count.c
+    stages/take.c               take (first or last) n records
+    stages/drop.c               drop (first or last) n records
+    stages/filer.c              read a file
+    stages/filew.c              write a file
+    stages/filea.c              append to a file
 
 # Rexx support
 
     xflrexx.c                   Rexx interface shim
-    rxstage.rx                  sample stage written in Rexx
+    rxstage.rx                  a sample stage written in Rexx
     rxsample.sh                 Rexx demonstration script
 
 # COBOL support
@@ -67,6 +70,6 @@ This is the source directory for XFL, POSIX Pipelines
 
 # Java support
 
-    xfljava.c                   developmental
+    xfljava.c
 
 

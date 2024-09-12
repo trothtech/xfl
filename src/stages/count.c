@@ -26,9 +26,11 @@
 #define  XFL_COUNT_MINLN  4
 #define  XFL_COUNT_MAXLN  5
 
+static char _eyeball0[] = "XFL pipeline stage 'count'";
+
 /* ------------------------------------------------------------------ */
 int main(int argc,char*argv[])
-  { static char _eyecatcher[] = "pipeline stage 'count' main()";
+  { static char _eyecatcher[] = "XFL pipeline stage 'count' main()";
     int rc, chars, words, lines, minln, maxln, om[8], reclen, i, o;
     char *args, *p, *q, *msgv[2], em[16], buffer[4096];
     struct PIPECONN *pc, *pn, *pi, *po, *po2;

@@ -4,6 +4,8 @@
 #               demonstrate POSIX Pipelines called from Rexx
 #         Date: 2024-05-19 (Sun) happy 60th MEN
 #
+#         Note: this script must be run AFTER installation
+#
 
 #
 # make some detection about this environment
@@ -18,6 +20,8 @@ F=`grep "^#define" configure.h \
     | awk '{print $3}' \
     | sed 's#"##g'`
 if [ ! -z "$F" ] ; then E=$F ; fi
+
+PATH="$E/bin:$PATH" ; export PATH
 
 #
 # try to be sure that the Rexx sample stage sits alongside other stages
@@ -43,9 +47,9 @@ if [ -z "$SHLIB_PATH" ] ; then SHLIB_PATH="$E/lib"
 for LD in /usr/opt/regina/lib /usr/opt/regina/lib64 \
           /usr/opt/oorexx/lib /usr/opt/oorexx/lib64 ; do
     if [ -d $LD ] ; then
-        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$LD"
-        DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:$LD"
-        SHLIB_PATH="$SHLIB_PATH:$LD"
+        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$LD" # for Linux and others
+        DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:$LD" # for MacOS/Darwin
+        SHLIB_PATH="$SHLIB_PATH:$LD" # for AIX and others like it
     fi
 done
 export LD_LIBRARY_PATH DYLD_LIBRARY_PATH SHLIB_PATH
