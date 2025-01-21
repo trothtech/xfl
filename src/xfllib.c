@@ -14,8 +14,10 @@
 #include <string.h>
 #include <fcntl.h>
 #include <signal.h>
-#include <syslog.h>
 #include <sys/stat.h>
+
+#define __UU
+#include <syslog.h>
 
 #include "configure.h"
 /* defines PREFIX among other things*/
@@ -111,10 +113,10 @@ char*xfl_argcat(int argc,char*argv[])
  */
 int xfl_error(int msgn,int msgc,char*msgv[],char*caller)
   { static char _eyecatcher[] = "xfl_error()";
-    char msgbuf[256];
+    unsigned char msgbuf[256];
     int rc;
 
-    rc = xmopen("xfl",0,&xflmsgs);
+    rc = xmopen((unsigned char*)"xfl",0,&xflmsgs);
 
     /* some functions indicate the error with a negative number       */
     if (msgn < 0) msgn = 0 - msgn;   /* force message number positive */
@@ -130,8 +132,8 @@ int xfl_error(int msgn,int msgc,char*msgv[],char*caller)
     xflmsgs.msglevel = 0;
 
     /* using pfxmaj and pfxmin is definitely outside the XMITMSGX API */
-    strncpy(xflmsgs.pfxmaj,"XFL",4);
-    strncpy(xflmsgs.pfxmin,caller,4);
+    strncpy((char*)xflmsgs.pfxmaj,"XFL",4);
+    strncpy((char*)xflmsgs.pfxmin,caller,4);
     /* also remember to up-case the latter */
 
     /* make the message */
@@ -149,7 +151,7 @@ int xfl_error(int msgn,int msgc,char*msgv[],char*caller)
  */
 int xfl_trace(int msgn,int msgc,char*msgv[],char*caller)
   { static char _eyecatcher[] = "xfl_trace()";
-    char msgbuf[256];
+    unsigned char msgbuf[256];
     int rc;
 
     /* consider tracing ... do we want it or not? */
@@ -159,7 +161,7 @@ int xfl_trace(int msgn,int msgc,char*msgv[],char*caller)
         if (p != NULL && *p != 0x00) xfl_dotrace = 1; }
     if (xfl_dotrace == 0) return 0;
 
-    rc = xmopen("xfl",0,&xflmsgs);
+    rc = xmopen((unsigned char*)"xfl",0,&xflmsgs);
 
     /* some functions indicate the error with a negative number       */
     if (msgn < 0) msgn = 0 - msgn;   /* force message number positive */
@@ -175,8 +177,8 @@ int xfl_trace(int msgn,int msgc,char*msgv[],char*caller)
     xflmsgs.msglevel = 0;
 
     /* using pfxmaj and pfxmin is definitely outside the XMITMSGX API */
-    strncpy(xflmsgs.pfxmaj,"XFL",4);
-    strncpy(xflmsgs.pfxmin,caller,4);
+    strncpy((char*)xflmsgs.pfxmaj,"XFL",4);
+    strncpy((char*)xflmsgs.pfxmin,caller,4);
     /* also remember to up-case the latter */
 
     /* make the message */
@@ -229,7 +231,7 @@ int xfl_stageexec(char*args,PIPECONN*pc[])
       }
     setenv("PIPECONN",pipeconn,1);
 
-    sprintf(pipeprog,"stages/%s",verb);                    // DEPRECATED
+    sprintf(pipeprog,"stages/%s",verb);                 /* DEPRECATED */
     execv(pipeprog,argv);
 /*  execve(pipeprog,argv,NULL);                                       */
 
@@ -262,7 +264,7 @@ int xfl_stagespawn(int argc,char*argv[],PIPECONN*pc[],PIPESTAGE*sx)
         if (pc[i]->flag & XFL_F_OUTPUT)
         sprintf(tmpbuf,"*.OUTPUT.%d:%d,%d",io++,pc[i]->fdf,pc[i]->fdr);
       else
-// 0100    E Direction "&1" not input or output
+/* 0100    E Direction "&1" not input or output                    // */
 { printf("fail\n");
         xfl_errno = XFL_E_DIRECTION;
  return -1; }
@@ -276,7 +278,7 @@ int xfl_stagespawn(int argc,char*argv[],PIPECONN*pc[],PIPESTAGE*sx)
       }
     *p = 0x00;                                /* terminate the string */
 
-// FIXME: we should do the PIPEPATH scanning before we fork()
+/* FIXME: we should do the PIPEPATH scanning before we fork()      // */
 
     /* fork() is expensive but the most common and reliable way here  */
     rc = fork();
@@ -285,17 +287,17 @@ int xfl_stagespawn(int argc,char*argv[],PIPECONN*pc[],PIPESTAGE*sx)
                           /* process the supplied array of connectors */
                   i = 0; while (pc[i] != NULL) { pc[i]->cpid = rc;
                                                  pc[i]->flag -= XFL_F_KEEP;
-//                                     xfl_sever(pc[i]);
+/*                                     xfl_sever(pc[i]);           // */
                                                  sx->cpid = rc;
                                                  i++;
  }
-//                i has the count of connectors, for what that's worth
+/*                i has the count of connectors, for what that's worth // */
                   return 0; }
     /* and finally, fork() returning zero means we are the child      */
 
 /* -- at this point we are the child process ------------------------ */
 
-//printf("xfl_stagespawn(%d,%s %s)\n",argc,argv[0],argv[1]);
+/* printf("xfl_stagespawn(%d,%s %s)\n",argc,argv[0],argv[1]);      // */
 
     /* prepare to pass connector info to the stage when it runs       */
     setenv("PIPECONN",envbuf,1);
@@ -304,13 +306,13 @@ int xfl_stagespawn(int argc,char*argv[],PIPECONN*pc[],PIPESTAGE*sx)
     while (px != NULL)
       {          /* close the connectors which the child will not use */
         if (px->flag & XFL_F_KEEP); else
-// if not previously closed ...
+/* if not previously closed ...                                    // */
           {
         close(px->fdf);
         close(px->fdr);
-// or maybe sever(px) instead?
+/* or maybe sever(px) instead?                                     // */
           }
-// step through connectors listed closing all *not* listed
+/* step through connectors listed closing all *not* listed         // */
         px = px->next;
       }
 
@@ -319,7 +321,7 @@ if (argc < 2) argv[1] = NULL;
     /* scan PIPEPATH for the stage of interest ($PREFIX/libexec/xfl)  */
     p = getenv("PIPEPATH"); if (p == NULL) p = "";
     if (*p == 0x00) p = PREFIX "/libexec/xfl";
-//  if (*p == 0x00) p = "stages"; // FIXME: remember to define PIPEPATH
+/*  if (*p == 0x00) p = "stages"; // FIXME: remember to define PIPEPATH */
     strncpy(pipepath,p,sizeof(pipepath)-1);
     p = q = pipepath;
     while (1)
@@ -344,11 +346,11 @@ if (argc < 2) argv[1] = NULL;
         if (*p == 0x00) break;  /* if end of string break out failing */
         q = p;         /* otherwise try again with next dir in search */
       }
-//  if (rc == 0) printf("xfl_stagespawn(): found '%s'\n",tmpbuf);
-//          else printf("xfl_stagespawn(): failed to find '%s'\n",argv[0]);
+/*  if (rc == 0) printf("xfl_stagespawn(): found '%s'\n",tmpbuf);  // */
+/*          else printf("xfl_stagespawn(): failed to find '%s'\n",argv[0]); // */
     if (rc == 0) execv(tmpbuf,argv);
-// FIXME: if executable not found we should return to the caller
-// FIXME: and that means this needs to be processed before the fork()
+/* FIXME: if executable not found we should return to the caller   // */
+/* FIXME: and that means this needs to be processed before the fork() // */
 
 #ifdef THIS_WAS_REPLACED
 
@@ -358,7 +360,7 @@ if (argc < 2) argv[1] = NULL;
     system(tmpbuf);
 
     exit(0);
-//  return 0;     NO!! we really do *not* want to go back into that code
+/*  return 0;     NO!! we really do *not* want to go back into that code // */
 
 #endif
   }
@@ -445,8 +447,8 @@ int xfl_getpipepart(PIPESTAGE**ps,char*l)
             /* if this struct has the label then its the one we want  */
             if(strcmp(m,l) == 0)
               {
-//printf("xfl_getpipepart(): re-using '%s'\n",l);         // 3047
-//printf("xfl_getpipepart(): arg0 '%s' args '%s'\n",pst->arg0,pst->args);   // 3027
+/* printf("xfl_getpipepart(): re-using '%s'\n",l);         // 3047 // */
+/* printf("xfl_getpipepart(): arg0 '%s' args '%s'\n",pst->arg0,pst->args); // 3027 // */
                 *ps = pst;
                 return 0;
               }
@@ -480,7 +482,7 @@ int xfl_getpipepart(PIPESTAGE**ps,char*l)
     pst->xpcc = 0;                     /* COMMON pipe connector count */
     pst->cpid = -1;       /* PID of child process handling this stage */
 
-//  xfl_pipestage->prev = pst;       /* prev head points back to this */
+/*  xfl_pipestage->prev = pst;       // prev head points back to this */
     xfl_pipestage = pst;              /* and this one gets the anchor */
     *ps = pst;
     return 0;
@@ -499,7 +501,7 @@ int xfl_stagestart(PIPECONN**pc)
     struct PIPECONN pc0, *pc1, *pcp;
     int i, n;
 
-//  openlog(const char *ident, int option, int facility);
+/*  openlog(const char *ident, int option, int facility);          // */
 
     *pc = NULL;
     pcp = NULL;
@@ -508,7 +510,7 @@ n = 0;
     /* connectors are passed to stages as matched file descriptors    */
     pipeconn = getenv("PIPECONN");
     if (pipeconn == NULL) return 0;        /* FIXME: this is an error */
-//printf("stagestart: PIPECONN='%s'\n",pipeconn);
+/* printf("stagestart: PIPECONN='%s'\n",pipeconn);                 // */
 
     /* parse the connections passed to this stage in the environment  */
     p = pipeconn;
@@ -519,11 +521,11 @@ n = 0;
 
         if (*p == 'I' || *p == 'i') pc0.flag = XFL_F_INPUT;
         if (*p == 'O' || *p == 'o') pc0.flag = XFL_F_OUTPUT;
-//0100    E Direction "&1" not input or output
+/* 0100    E Direction "&1" not input or output                    // */
 
-//printf("before '%s'\n",p);
+/* printf("before '%s'\n",p);                                      // */
         while (*p != 0x00 && *p != ' ' && *p != '.' && *p != ':') p++;
-//printf("after1 '%s'\n",p);
+/* printf("after1 '%s'\n",p);                                      // */
 
         /* if there is a name and it is numeric then it is a number   */
         if (*p == '.') { p++;
@@ -535,7 +537,7 @@ n = 0;
             number[i] = 0x00; pc0.n = atoi(number);
         while (*p != 0x00 && *p != ' ' && *p != '.' && *p != ':') p++;
  }
-//printf("after2 '%s'\n",p);
+/* printf("after2 '%s'\n",p);                                      // */
 
         if (*p == ':')                 /* else throw error number 193 */
           { p++;
@@ -556,7 +558,7 @@ n = 0;
         pc0.prev = *pc;                                 /* STAGESTART */
 
         /* allocate the connector struct for hand-off                 */
-        pc1 = malloc(sizeof(pc0));    // FIXME: check for malloc() error
+        pc1 = malloc(sizeof(pc0));    /* FIXME: check for malloc() error // */
         if (*pc == NULL) *pc = pc1;
               else pcp->next = pc1;                     /* STAGESTART */
         memcpy(pc1,&pc0,sizeof(pc0));
@@ -566,7 +568,7 @@ n = n + 1;
         while (*p != 0x00 && *p == ' ') p++;
       }
 
-//printf("xfl_stagestart: %d connectors\n",n);      // can discard variable "n"
+/* printf("xfl_stagestart: %d connectors\n",n);      // can discard variable "n" // */
 
     /* be sure that stages won't get whacked by SIGPIPE on connectors */
     signal(SIGPIPE,SIG_IGN);
@@ -583,12 +585,12 @@ int xfl_stagequit(PIPECONN*pc)
 
     while (pc != NULL)
       {
-//      /* if an input connector then signal the producer to quit     */
-//      if (pc->flag && XFL_F_INPUT)
-//        { // printf("xfl_stagequit: signaling consumer to sever the connection\n");
-//           write(pc->fdr,"QUIT",sizeof("QUIT")); }
-//      /* in any case close the forward and reverse file descriptors */
-//      close(pc->fdf); close(pc->fdr);
+/*      // if an input connector then signal the producer to quit     */
+/*      if (pc->flag && XFL_F_INPUT)                               // */
+/*        { // printf("xfl_stagequit: signaling consumer to sever the connection\n"); */
+/*           write(pc->fdr,"QUIT",sizeof("QUIT")); }               // */
+        /* in any case close the forward and reverse file descriptors */
+/*      close(pc->fdf); close(pc->fdr);                            // */
         xfl_sever(pc);
 
         /* proceed to next struct in the chain and free this one      */
@@ -597,7 +599,7 @@ int xfl_stagequit(PIPECONN*pc)
         pc = pn;
       }
 
-//  closelog();
+/*  closelog();                                                    // */
 
     return 0;
   }
@@ -618,9 +620,9 @@ int xfl_peekto(PIPECONN*pc,void*buffer,int buflen)
     /* be sure we are on the input side of the connection             */
     if ((pc->flag & XFL_F_INPUT) == 0)
       { fprintf(stderr,"xfl_peekto: called for a non-input connector\n");
-        return -1; }  //FIXME: get a better return code
-//printf("peekto: okay but bailing out for development\n");
-//return -614;
+        return -1; } /* FIXME: get a better return code            // */
+/* printf("peekto: okay but bailing out for development\n");       // */
+/* return -614;                                                    // */
 
     /* if the connection was severed then return XFL_E_SEVERED (12)   */
     if (pc->flag & XFL_F_SEVERED) { xfl_errno = XFL_E_SEVERED; return -1; }
@@ -652,11 +654,11 @@ int xfl_peekto(PIPECONN*pc,void*buffer,int buflen)
  xfl_sever(pc); xfl_errno = XFL_E_SEVERED; return -1; }
         rc = 0 - errno; if (rc == 0) rc = -1;
         perror("peekto(): write():"); /* provide standard Unix report */
-//      /* also throw a pipelines/ductwork/plenum error and bail out  */
-//      sprintf(em,"%d",rc); msgv[1] = em;       /* integer to string */
-//      xfl_error(26,2,msgv,"LIB");        /* provide specific report */
+/*      // also throw a pipelines/ductwork/plenum error and bail out  */
+/*      sprintf(em,"%d",rc); msgv[1] = em;       // integer to string */
+/*      xfl_error(26,2,msgv,"LIB");        // provide specific report */
         return rc; }
-//printf("xfl_peekto: sent STAT control %d\n",rc);
+/* printf("xfl_peekto: sent STAT control %d\n",rc);                // */
 
     /* PROTOCOL:                                                      */
     /* read the response which should simply have an integer string   */
@@ -665,21 +667,21 @@ int xfl_peekto(PIPECONN*pc,void*buffer,int buflen)
       { char *msgv[2], em[16];
         rc = 0 - errno; if (rc == 0) rc = -1;
         perror("peekto(): read()");        /* provide standard report */
-//      /* also throw a pipelines/ductwork/plenum error and bail out  */
-//      sprintf(em,"%d",rc); msgv[1] = em;       /* integer to string */
-//      xfl_error(26,2,msgv,"LIB");         /* provide specific report */
+/*      // also throw a pipelines/ductwork/plenum error and bail out  */
+/*      sprintf(em,"%d",rc); msgv[1] = em;       // integer to string */
+/*      xfl_error(26,2,msgv,"LIB");        // provide specific report */
         return rc; }
     infobuff[rc] = 0x00;
-//printf("xfl_peekto: infobuff = '%s'\n",infobuff);
+/* printf("xfl_peekto: infobuff = '%s'\n",infobuff);               // */
 
     /* convert integer string into a binary integer */
-//  if (*infobuff is non-digit) then set this connector to close
-if (*infobuff == 0x00) return -1;    // FIXME: also set an errno
+/*  if (*infobuff is non-digit) then set this connector to close   // */
+if (*infobuff == 0x00) return -1;    /* FIXME: also set an errno   // */
 
     if (isdigit(*infobuff))
     reclen = atoi(infobuff);
-//  else { /* shutdown */ }
-//printf("xfl_peekto: expecting %d bytes\n",reclen);
+/*  else { // shutdown // }                                        // */
+/* printf("xfl_peekto: expecting %d bytes\n",reclen);              // */
 
     /* undocumented feature: zero-length peekto tells the record size */
     if (buflen == 0) return reclen;
@@ -693,15 +695,15 @@ if (*infobuff == 0x00) return -1;    // FIXME: also set an errno
     if (rc < 0)
       { char *msgv[2], em[16];
         if (errno == EPIPE) {
-//printf("xfl_peekto(): got an EPIPE for a PEEK\n");
+/* printf("xfl_peekto(): got an EPIPE for a PEEK\n");              // */
  xfl_sever(pc); return -XFL_E_SEVERED; }
         rc = 0 - errno; if (rc == 0) rc = -1;
         perror("peekto(): write():");      /* provide standard report */
-//      /* also throw a pipelines/ductwork/plenum error and bail out  */
-//      sprintf(em,"%d",rc); msgv[1] = em;       /* integer to string */
-//      xfl_error(26,2,msgv,"LIB");         /* provide specific report */
+/*      // also throw a pipelines/ductwork/plenum error and bail out  */
+/*      sprintf(em,"%d",rc); msgv[1] = em;       // integer to string */
+/*      xfl_error(26,2,msgv,"LIB");        // provide specific report */
         return rc; }
-//printf("xfl_peekto: sent PEEK; expecting %d bytes\n",reclen);
+/* printf("xfl_peekto: sent PEEK; expecting %d bytes\n",reclen);   // */
 
     /* PROTOCOL:                                                      */
     rc = read(pc->fdf,buffer,reclen);
@@ -709,9 +711,9 @@ if (*infobuff == 0x00) return -1;    // FIXME: also set an errno
       { char *msgv[2], em[16];
         rc = 0 - errno; if (rc == 0) rc = -1;
         perror("peekto(): read()");        /* provide standard report */
-//      /* also throw a pipelines/ductwork/plenum error and bail out  */
-//      sprintf(em,"%d",rc); msgv[1] = em;       /* integer to string */
-//      xfl_error(26,2,msgv,"LIB");         /* provide specific report */
+/*      // also throw a pipelines/ductwork/plenum error and bail out  */
+/*      sprintf(em,"%d",rc); msgv[1] = em;       // integer to string */
+/*      xfl_error(26,2,msgv,"LIB");        // provide specific report */
         return rc; }
 
     return rc;
@@ -733,7 +735,7 @@ int xfl_readto(PIPECONN*pc,void*buffer,int buflen)
     /* be sure we are on the input side of the connection             */
     if ((pc->flag & XFL_F_INPUT) == 0)
       { fprintf(stderr,"xfl_readto: called for a non-input connector\n");
-        return -1; } // FIXME: get a better return code
+        return -1; } /* FIXME: get a better return code            // */
 
     /* if the connection was severed then return XFL_E_SEVERED (12)   */
     if (pc->flag & XFL_F_SEVERED) { xfl_errno = XFL_E_SEVERED; return -1; }
@@ -782,14 +784,14 @@ int n;
 
     /* be sure we are on the output side of the connection            */
     if ((pc->flag & XFL_F_OUTPUT) == 0)
-//    { xfl_error(100,0,NULL,"LIB");       /* provide specific report */
+/*    { xfl_error(100,0,NULL,"LIB");       // provide specific report */
       { fprintf(stderr,"xfl_output: called for a non-output connector\n");
-        return -1; } // FIXME: get a better return code
+        return -1; } /* FIXME: get a better return code            // */
 
     /* if the connection was severed then return XFL_E_SEVERED (12)   */
     if (pc->flag & XFL_F_SEVERED) { xfl_errno = XFL_E_SEVERED; return -1; }
 
-//printf("xfl_output: '%s' %d %d\n",buffer,buflen,strlen(buffer));
+/* printf("xfl_output: '%s' %d %d\n",buffer,buflen,strlen(buffer)); // */
 
 n = 0;
     while (1)
@@ -797,20 +799,20 @@ n = 0;
 n = n + 1;
         /* the following is a blocking read; this routine waits until *
          * the consumer side signals that it is ready to consume      */
-//      rc = read(pc->fdr,infobuff,sizeof(infobuff));
+/*      rc = read(pc->fdr,infobuff,sizeof(infobuff));              // */
         rc = 0; while (rc == 0)
         rc = read(pc->fdr,infobuff,4);    /* expect 4 bytes by design */
         if (rc < 4)
           { char *msgv[2], em[16];
-//          rc = errno; if (rc == 0) rc = -1;
-//          perror("output(): read():");   /* provide standard report */
+/*          rc = errno; if (rc == 0) rc = -1;                      // */
+/*          perror("output(): read():");   // provide standard report */
             /* also throw a pipelines/ductwork/plenum error and bail  */
             sprintf(em,"%d",rc); msgv[1] = em;   /* integer to string */
             xfl_error(26,2,msgv,"LIB");    /* provide specific report */
 printf("xfl_output: error trying to read the control channel after %d %d\n",n,rc);
             return rc; }
         infobuff[rc] = 0x00;
-//printf("xfl_output: infobuff = '%s'\n",infobuff);
+/* printf("xfl_output: infobuff = '%s'\n",infobuff);               // */
 
         xx = 0;
         switch (*infobuff)
@@ -842,7 +844,7 @@ printf("xfl_output: got a quit signal from the consumer\n");
 
             default:
 printf("xfl_output: protocol error '%s'\n",infobuff);
-// need to indicate a protocol error here
+/* need to indicate a protocol error here                          // */
                 rc = -1;
                 xx = 1;
                 break;
@@ -866,7 +868,7 @@ printf("xfl_output: error after protocol\n");
     /* increment the record counter */
     pc->rn = pc->rn + 1;
 
-//printf("xfl_output: (normal exit)\n");
+/* printf("xfl_output: (normal exit)\n");                          // */
 
     return 0;
   }

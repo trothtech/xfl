@@ -10,9 +10,9 @@
 
 #ifndef _XFLLIB_H
 
-//static char *_xfl_version = "XFL 1.0.4";
-#define  XFL_VERSION  (((1) << 24) + ((0) << 16) + ((4) << 8) + (0))
-//static int xfl_version = XFL_VERSION;
+/* static char *_xfl_version = "XFL 1.0.5";                           */
+#define  XFL_VERSION  (((1) << 24) + ((0) << 16) + ((5) << 8) + (0))
+/* static int xfl_version = XFL_VERSION;                              */
 
 /* the following mnemonics represent bits in the flag field           */
 #define     XFL_F_INPUT         0x0001
@@ -68,13 +68,13 @@ typedef struct PIPECONN {
 /* so that the launcher can bring them up and wait for them to exit.  */
 typedef struct PIPESTAGE {
     char *text;                       /* string describing this stage */
-//  int plinenumb;              /* pipeline where this stage runs N/A */
-//  int stagenumb;            /* number of this stage in its line N/A */
+/*  int plinenumb;              // pipeline where this stage runs N/A */
+/*  int stagenumb;            // number of this stage in its line N/A */
     char *label;                          /* pointer to label, if any */
     char *arg0;                          /* executable name or "verb" */
     char *args;                                   /* arguments string */
-//  int argc;
-//  char **argv;
+/*  int argc;                                                      // */
+/*  char **argv;                                                   // */
     int  ipcc;                          /* input pipe connector count */
     void *ipcv[16];              /* input pipe connector vector array */
     int  opcc;                         /* output pipe connector count */

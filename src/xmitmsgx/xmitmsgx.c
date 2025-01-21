@@ -17,8 +17,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <syslog.h>
 #include <errno.h>
+
+#define __UU
+#include <syslog.h>
 
 #include <libgen.h>
 #include <ctype.h>
@@ -77,7 +79,7 @@ int xmopen(unsigned char*file,int opts,struct MSGSTRUCT*ms)
   {
     int rc, fd;
     struct stat statbuf;
-    unsigned char filename[256]; int filesize;
+    char filename[256]; int filesize;
     int memsize, i;
     unsigned char *p, *q, *escape, *locale;
 
@@ -106,7 +108,7 @@ int xmopen(unsigned char*file,int opts,struct MSGSTRUCT*ms)
 
     /* if that didn't work then try filename plus locale variables    */
     if (rc != 0) {
-        locale = getenv(localevars[i]);
+        locale = (unsigned char*)getenv(localevars[i]);
         if (locale != NULL && *locale != 0x00) {
             (void) strncpy(ms->locale,locale,sizeof(ms->locale)-1);
 

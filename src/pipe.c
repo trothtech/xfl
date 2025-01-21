@@ -104,7 +104,7 @@ int main(int argc,char*argv[])
     p = args;
     while ((*p == ' ' && *p == '\t') && *p != 0x00) p++;
     r = p;
-//printf("pipe: pipeline '%s'\n",p);
+/* printf("pipe: pipeline '%s'\n",p);                              // */
 
     /* if we have CMS-style options then process them here and now    */
     if (*p == '(')
@@ -160,13 +160,13 @@ int main(int argc,char*argv[])
     while ((*r == ' ' || *r == '\t') && *r != 0x00) r++;
     p = r;
 
-//printf("escape='%s'\n",escape);   /* FIXME: --escape/ESCAPE should be xorc */
-//printf("endchar='%s'\n",endchar);   /* FIXME: --endchar/ENDCHAR should be xorc */
-//printf("separator='%s'\n",stagesep);   /* FIXME: --stagesep/STAGESEP should be xorc */
+/* printf("escape='%s'\n",escape);   // FIXME: --escape/ESCAPE should be xorc */
+/* printf("endchar='%s'\n",endchar);   // FIXME: --endchar/ENDCHAR should be xorc */
+/* printf("separator='%s'\n",stagesep);   // FIXME: --stagesep/STAGESEP should be xorc */
 
-//printf("arg0='%s'\n",arg0);
-//printf("argc=%d\n",argc);
-//printf("args='%s'\n",r);
+/* printf("arg0='%s'\n",arg0);                                     // */
+/* printf("argc=%d\n",argc);                                       // */
+/* printf("args='%s'\n",r);                                        // */
     if (*p == 0x00)   /* if empty string then we have a null pipeline */
       { if (nullokay) return 0;
         xfl_error(12,2,msgv,"PIP");           /* 0012 E Null pipeline */
@@ -176,7 +176,7 @@ int main(int argc,char*argv[])
     if (*dotrace != 0x00) setenv("PIPEOPT_TRACE",dotrace,1);
 
     /* now parse the duly derived pipeline                            */
-//  msgv[1] = args;
+/*  msgv[1] = args;                                                // */
     msgv[1] = r;
     xfl_trace(3000,2,msgv,"PIP");
 
@@ -211,8 +211,8 @@ pend = 0;
               { /* the following three need to be done AFTER stage stacking */
                 pend = 1;
                 pnum = pnum + 1;            /* bump the stream number */
-//              snum = 1;                   /* reset the stage number */
-//              pp[0] = pp[1] = NULL;   /* start next w no connectors */
+/*              snum = 1;                   // reset the stage number */
+/*              pp[0] = pp[1] = NULL;   // start next w no connectors */
               }
             /* in any case ... */
             if (*p) *p++ = 0x00;         /* terminate this sub-string */
@@ -247,12 +247,12 @@ pend = 0;
             if (*r != 0x00) *r++ = 0x00;
             arqv[1] = r;         /* stage args */
             if (*r == 0x00) arqc = 1; else arqc = 2;
-//printf("verb '%s' args '%s'\n",arqv[0],arqv[1]);
-//printf("plenum: %s: %s\n",l,arqv[0]);
+/* printf("verb '%s' args '%s'\n",arqv[0],arqv[1]);                // */
+/* printf("plenum: %s: %s\n",l,arqv[0]);                           // */
 
         /* get a new struct for this stage */
         xfl_getpipepart(&ps,l);
-//printf("pipe: label: %s\n",l);
+/* printf("pipe: label: %s\n",l);                                  // */
 if (ps == NULL) printf("error\n");
 
               {
@@ -267,7 +267,7 @@ if (*v0 && *v1) printf("plenum: ERROR: multiple commands on a stage\n");
                 if (arqv[1] != NULL && *arqv[1] != 0x00)
                     ps->args = arqv[1]; }
 
-//printf("plenum: PC counters %d %d\n",ps->ipcc,ps->opcc);
+/* printf("plenum: PC counters %d %d\n",ps->ipcc,ps->opcc);        // */
             if (pi != NULL)
               { ps->ipcv[ps->ipcc] = pi;
                 ps->ipcc = ps->ipcc + 1;
@@ -282,12 +282,12 @@ if (*v0 && *v1) printf("plenum: ERROR: multiple commands on a stage\n");
                 ps->xpcv[ps->xpcc] = po;
                 ps->xpcc = ps->xpcc + 1;
                 ps->xpcv[ps->xpcc] = NULL; }     /* mark end of chain */
-//printf("plenum: PC counters %d %d\n",ps->ipcc,ps->opcc);
-//printf("   pi = %08X;    po = %08X; %s\n",pi,po,ps->arg0);
+/* printf("plenum: PC counters %d %d\n",ps->ipcc,ps->opcc);        // */
+/* printf("   pi = %08X;    po = %08X; %s\n",pi,po,ps->arg0);      // */
           }
 
 
-//      stagetot++;                    /* bump stagenum for reporting */
+/*      stagetot++;                    // bump stagenum for reporting */
         if (pend)       /* if end of stream then prep for next stream */
           {
                 snum = 1;                   /* reset the stage number */
@@ -302,7 +302,7 @@ if (*v0 && *v1) printf("plenum: ERROR: multiple commands on a stage\n");
     /* parse parse parse parse parse parse parse parse parse parse    */
 
     /* be sure that stages won't get whacked by SIGPIPE on connectors */
-//  signal(SIGCHLD,SIG_IGN);
+/*  signal(SIGCHLD,SIG_IGN);                                       // */
 
     /* launch all stacked/queued stages */
     i = 0; sx = xfl_pipestage;
@@ -319,8 +319,8 @@ if (*v0 && *v1) printf("plenum: ERROR: multiple commands on a stage\n");
         arqv[1] = sx->args;
         arqv[2] = NULL;
 
-//      pi = sx->ipcv[0];   /* pi */
-//      po = sx->opcv[0];   /* po */
+/*      pi = sx->ipcv[0];   // pi //                               // */
+/*      po = sx->opcv[0];   // po //                               // */
 
         v = sx->xpcv;
         xfl_stagespawn(c,arqv,v,sx);
@@ -349,11 +349,11 @@ if (*v0 && *v1) printf("plenum: ERROR: multiple commands on a stage\n");
       { rc = wpid = waitpid(-1,&wstatus,0);
         if (rc < 1) break;
 
-//      printf("pipe: stage with PID %d finished\n",wpid);
+/*      printf("pipe: stage with PID %d finished\n",wpid);         // */
 
         sprintf(em,"%d",wpid);
         msgv[1] = em;
-//      xfl_error(3099,2,msgv,"PIP");
+/*      xfl_error(3099,2,msgv,"PIP");                              // */
         xfl_trace(3099,2,msgv,"PIP"); }
 
     if (rc < 0 && errno != ECHILD) perror("waitpid()");
@@ -369,8 +369,8 @@ label logic
                 | A:   -- connects labeled stage to an output
                 | A: | -- is illegal
 
-    sep = '|';                // default stage separator is the usual **
-    end = 0x00;                   // default end character is not set **
+    sep = '|';                // default stage separator is the usual //
+    end = 0x00;                   // default end character is not set //
 
 0059 E Logical record length &1 is not valid
 0183 E Output buffer overflow; &1 required
