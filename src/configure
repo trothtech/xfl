@@ -51,7 +51,17 @@ LOCDIR=$PREFIX/share/locale                               # for xmitmsgx
 US=`uname -s | sed 's#/##g'`
 UM=`uname -m | sed 's#^i.86$#i386#' | sed 's#^armv.l$#arm#'`
 case "$US" in
-    Linux|FreeBSD)
+   
+    Darwin)
+        if [ "$UM" = "arm64" ]; then
+            echo "Configuring for macOS (ARM64 - Apple Silicon)"
+            CFLAGS="$CFLAGS -fPIC"
+            LDFLAGS=
+            SHFLAGS="-dynamiclib"
+            SHLIB_EXT=".dylib"
+        fi
+        ;;
+ Linux|FreeBSD)
         CFLAGS="$CFLAGS -fPIC"
 #       LDFLAGS=
         SHFLAGS="$LDFLAGS -shared"
