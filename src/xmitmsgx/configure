@@ -70,6 +70,16 @@ LOCDIR=$PREFIX/share/locale                               # for xmitmsgx
 US=`uname -s | sed 's#/##g'`
 UM=`uname -m | sed 's#^i.86$#i386#' | sed 's#^armv.l$#arm#'`
 case "$US" in
+
+    Darwin)
+        if [ "$UM" = "arm64" ]; then
+            echo "Configuring for macOS (ARM64 - Apple Silicon)"
+            CFLAGS="$CFLAGS -fPIC"
+            LDFLAGS=
+            SHFLAGS="-dynamiclib"
+            SHLIB_EXT=".dylib"
+        fi
+        ;;
     Linux|FreeBSD)
         CFLAGS="$CFLAGS -fPIC"
 #       LDFLAGS=
@@ -95,7 +105,7 @@ case "$US" in
     OS390)              # OS/390, z/OS
         UM="s390x" # guessing! since both "s390x" and "s390" are viable
         CC="xlc"
-        CFLAGS="-DOECS -D_OE_SOCKETS"
+        CFLAGS="-DOECS -D_OE_SOCKETS -D__UU"
         LDFLAGS="-O -qxplink"
         SHFLAGS="$LDFLAGS -qdll"
         if [ -d /usr/lib/nls/msg ] ; then LOCDIR=/usr/lib/nls/msg ; fi
@@ -103,7 +113,7 @@ case "$US" in
     zVM|VMESA)          # VM/ESA, z/VM
         UM="s390" # guessing! but CMS is historically slow w/r/t 64-bit
         CC="xlc"
-        CFLAGS="-DOECS -D_OE_SOCKETS"
+        CFLAGS="-DOECS -D_OE_SOCKETS -D__UU"
         LIBS="-l//posxsock -l//vmmtlib"
         ;;
 esac
@@ -122,7 +132,7 @@ if [ ! -z "$CHICORY_SYSTEM" ] ; then SYSTEM=$CHICORY_SYSTEM
 
 #
 # announce
-echo "$Z: setting up 'sendfile' for $SYSTEM ..."
+echo "$Z: setting up for $SYSTEM ..."
 
 #
 # silently move old makefile aside:
