@@ -38,8 +38,7 @@ int main(int argc,char*argv[])
     q = needle = p;
     while (*q != 0x00 && *q != '/') q++;
     if (*q == '/') *q = 0x00;
-//printf("locate: needle '%s'\n",needle);
-
+// fprintf(stderr,"locate: needle '%s'\n",needle);
 
     /* snag the first input stream and the first two output streams   */
     pi = pop = pos = NULL;
@@ -50,7 +49,7 @@ int main(int argc,char*argv[])
     for (       ; pn != NULL && pos == NULL; pn = pn->next)
       { if (pn->flag & XFL_F_OUTPUT) pos = pn; }
 
-//printf("locate: %08X %08X %08X\n",pi,pop,pos);
+// fprintf(stderr,"locate: %08X %08X %08X\n",pi,pop,pos);
 //system("printenv | grep 'PIPE'");
 
     while (1)
@@ -67,7 +66,7 @@ int main(int argc,char*argv[])
         /* is string NOT present? Y: write to primary, N: secondary   */
         if (strstr(buffer,needle) == NULL)
 #else
-//printf("locate: haystack '%s'\n",buffer);
+// fprintf(stderr,"locate: haystack '%s'\n",buffer);
 //printf("locate: needle '%s'\n",needle);
         /* is the string present? Y: write to primary, N: secondary   */
         if (strstr(buffer,needle) != NULL)
@@ -75,8 +74,8 @@ int main(int argc,char*argv[])
         rc = xfl_output(pop,buffer,buflen);   /* send it down primary */
         else
         rc = xfl_output(pos,buffer,buflen); /* send it down secondary */
-        if (rc < 0) break;
-
+// fprintf(stderr,"xfl_output() returned %d\n",rc);
+//      if (rc < 0) break;
 
         /* now consume the record from the input stream               */
         rc = xfl_readto(pi,NULL,0);   /* consume record after sending */

@@ -68,19 +68,19 @@ LOCDIR=$PREFIX/share/locale                               # for xmitmsgx
 #
 # identify this environment/system
 US=`uname -s | sed 's#/##g'`
-UM=`uname -m | sed 's#^i.86$#i386#' | sed 's#^armv.l$#arm#'`
+UM=`uname -m | sed 's#^i.86$#i386#' | sed 's#^armv.l$#arm#' | sed 's#^evbarm$#arm#'`
 case "$US" in
 
     Darwin)
         if [ "$UM" = "arm64" ]; then
             echo "Configuring for macOS (ARM64 - Apple Silicon)"
             CFLAGS="$CFLAGS -fPIC"
-            LDFLAGS=
+            LDFLAGS=""
             SHFLAGS="-dynamiclib"
             SHLIB_EXT=".dylib"
         fi
         ;;
-    Linux|FreeBSD)
+    Linux|FreeBSD|NetBSD)
         CFLAGS="$CFLAGS -fPIC"
 #       LDFLAGS=
         SHFLAGS="$LDFLAGS -shared"
@@ -95,32 +95,55 @@ case "$US" in
         US="CYGWIN"
         SHFLAGS="$LDFLAGS -shared"
         ;;
+    MINGW*|MSYS*)
+        US="MINGW"
+        if [ "$UM" = "x86_64" ] ; then CFLAGS="$CFLAGS -D_WIN64 -m64"
+                                  else CFLAGS="$CFLAGS -D_WIN32 -m32" ; fi
+#       LIBS="-lwsock32 -lws2_32"
+        LIBS="-luser32 -lws2_32" # -lkernel32 -lwsock32
+        LDFLAGS="$LDFLAGS $LIBS"
+        SHFLAGS="$LDFLAGS -shared"
+        ;;
     AIX)
         UM=`uname -p`
         ;;
     Sun*|Sol*)
         UM=`uname -p`
         LIBS="-lsocket -lnsl"
+        LDFLAGS="$LDFLAGS -lsocket -lnsl"
+        SHFLAGS="$LDFLAGS -shared -Wl,-h"
         ;;
     OS390)              # OS/390, z/OS
         UM="s390x" # guessing! since both "s390x" and "s390" are viable
         CC="xlc"
-        CFLAGS="-DOECS -D_OE_SOCKETS -D__UU"
-        LDFLAGS="-O -qxplink"
+        CFLAGS="-DOECS -D_OE_SOCKETS -D__UU -Wc,SSCOM"
+#       LDFLAGS="-O -qxplink"
+        LDFLAGS=""
         SHFLAGS="$LDFLAGS -qdll"
         if [ -d /usr/lib/nls/msg ] ; then LOCDIR=/usr/lib/nls/msg ; fi
         ;;
     zVM|VMESA)          # VM/ESA, z/VM
         UM="s390" # guessing! but CMS is historically slow w/r/t 64-bit
         CC="xlc"
-        CFLAGS="-DOECS -D_OE_SOCKETS -D__UU"
+        CFLAGS="-DOECS -D_OE_SOCKETS -D__UU -Wc,SSCOM"
         LIBS="-l//posxsock -l//vmmtlib"
+        LDFLAGS="$LDFLAGS -l//posxsock -l//vmmtlib"
         ;;
 esac
 
-#LOCALE examples:
+#
+# determine the locale
+if [ -z "$LOCALE" -a ! -z "$LANG" ] ; then LOCALE="$LANG" ; fi
+if [ -z "$LOCALE" -a ! -z "$LC_CTYPE" ] ; then LOCALE="$LC_CTYPE" ; fi
+if [ -z "$LOCALE" -a ! -z "$LC_MESSAGES" ] ; then LOCALE="$LC_MESSAGES" ; fi
+if [ -z "$LOCALE" -a ! -z "$LC_ALL" ] ; then LOCALE="$LC_ALL" ; fi
+if [ -z "$LOCALE" -a ! -z "$LANGUAGE" ] ; then LOCALE="$LANGUAGE" ; fi
+# perform locale clean-up
+LOCALE=`echo "$LOCALE" | awk -F. '{print $1}'`
+# LOCALE examples:
 #/usr/share/locale/
 #/usr/lib/nls/msg/
+#/usr/lib/locale/
 #/usr/share/nls/
 #LOCALE=en_US.UTF-8
 #LOCALE=en_US
@@ -147,17 +170,47 @@ RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
 
 #
 # create proper makefile from reference input
-cat makefile.in \
-  | sed "s#%CFLAGS%#$CFLAGS#g" \
-  | sed "s#%PREFIX%#$PREFIX#g" \
-  | sed "s#%SYSTEM%#$SYSTEM#g" \
-  | sed "s#%LDFLAGS%#$LDFLAGS#g" \
-  | sed "s#%SHFLAGS%#$SHFLAGS#g" \
-  | sed "s#%LIBS%#$LIBS#g" \
-  | sed "s#%LOCDIR%#$LOCDIR#g" \
-  | sed 's#^        #\t#' \
-  >> makefile
+cat makefile > makefile.tmp
 RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+cat makefile.in >> makefile.tmp
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+sed "s#%CFLAGS%#$CFLAGS#g"   < makefile.tmp > makefile.sed
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+mv makefile.sed makefile.tmp
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+sed "s#%PREFIX%#$PREFIX#g"   < makefile.tmp > makefile.sed
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+mv makefile.sed makefile.tmp
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+sed "s#%SYSTEM%#$SYSTEM#g"   < makefile.tmp > makefile.sed
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+mv makefile.sed makefile.tmp
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+sed "s#%LDFLAGS%#$LDFLAGS#g" < makefile.tmp > makefile.sed
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+mv makefile.sed makefile.tmp
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+sed "s#%SHFLAGS%#$SHFLAGS#g" < makefile.tmp > makefile.sed
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+mv makefile.sed makefile.tmp
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+sed "s#%LIBS%#$LIBS#g"       < makefile.tmp > makefile.sed
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+mv makefile.sed makefile.tmp
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+sed "s#%LOCDIR%#$LOCDIR#g"   < makefile.tmp > makefile.sed
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+mv makefile.sed makefile.tmp
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+sed "s#%LOCALE%#$LOCALE#g"   < makefile.tmp > makefile.sed
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+mv makefile.sed makefile.tmp
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+sed 's#^        #	#'      < makefile.tmp > makefile.sed
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+mv makefile.sed makefile
+RC=$? ; if [ $RC -ne 0 ] ; then exit $RC ; fi
+rm makefile.tmp
 
 #
 # create configuration header file and sourcable shell script
@@ -167,7 +220,9 @@ echo "PREFIX=#$PREFIX#"   >> configure.tmp
 echo "SYSTEM=#$SYSTEM#"   >> configure.tmp
 echo "LDFLAGS=#$LDFLAGS#" >> configure.tmp
 echo "SHFLAGS=#$SHFLAGS#" >> configure.tmp
+echo "LIBS=#$LIBS#"       >> configure.tmp
 echo "LOCDIR=#$LOCDIR#"   >> configure.tmp                    # xmitmsgx
+echo "LOCALE=#$LOCALE#"   >> configure.tmp                    # xmitmsgx
 sed 's/#/"/g' < configure.tmp | awk '{print "#define" , $0}' | sed 's/=/ /' > configure.h
 sed 's/#/"/g' < configure.tmp > configure.sh # chmod a+x configure.sh
 rm configure.tmp

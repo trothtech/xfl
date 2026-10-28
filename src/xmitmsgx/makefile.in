@@ -9,10 +9,10 @@
 #
 
 APPLID          =       xmitmsgx
-VERSION         =       2.1.4
+VERSION         =       2.3.2
 
 DELIVERABLES    =       xmitmsg xmiterr xmmlogin libxmitmsgx.a libxmitmsgxdyn.so
-SOURCEURL       =       https://raw.githubusercontent.com/trothr/xmitmsgx/master
+SOURCEURL       =       https://raw.githubusercontent.com/trothtech/xmm/master
 LOCALE          =       en_US
 
 ##### configuration #####
@@ -143,6 +143,15 @@ python:
 java:
 		@echo "$(MAKE): support for Java is planned"
 
+#
+# flatten the silly hierarchy
+com:
+        @mkdir -p com
+        @if [ ! -h com/casita ] ; then \
+          ln -s . com/casita ; fi
+        @if [ ! -h com/casita/xmitmsgx ] ; then \
+          ln -s .. com/casita/xmitmsgx ; fi
+
 MessageService.class:  MessageService.java
 		javac MessageService.java
 
@@ -154,6 +163,9 @@ xmmjava.h:	MessageService.class
 
 xmmjava.o:	xmmjava.c
 	cc -I. -I/usr/lib/jvm/java-1.8.0-openjdk/include -I/usr/lib/jvm/java-1.8.0-openjdk/include/linux -c xmmjava.c 
+
+libxmmjava.so:	xmmjava.o xmitmsgx.o
+	$(CC) $(LDFLAGS) -shared -o libxmmjava.so xmmjava.o xmitmsgx.o
 
 ########################################################################
 # COBOL support
@@ -208,6 +220,8 @@ install:        $(DELIVERABLES) xmitmsgx.msgs errno.msgs
 		cp -p xmitmsgx.msgs errno.msgs $(PREFIX)/share/locale/$(LOCALE)/.
 		cp -p xmitmivp.sh $(PREFIX)/sbin/.
 		cp -p xmitmivp.c $(PREFIX)/src/.
+#
+		cp -p xmmdemoc.c xmmdemoc.sh xmmrexx.rx xmmrexx.sh $(PREFIX)/src/.
 
 ########################################################################
 # RPM support
@@ -219,10 +233,10 @@ xmitmsgx.rpm:   xmitmsgx.spec
 
 #
 xmitmsgx.spec:  xmitmsgx.spec.in
-		@echo "$(MAKE): checking required variables"
-		test ! -z "$(UNAMEM)" # UNAMEM
-		test ! -z "$(RELEASE)" # RELEASE
-		test ! -z "$(STAGING)" # STAGING
+#		@echo "$(MAKE): checking required variables"
+#		test ! -z "$(UNAMEM)" # UNAMEM
+#		test ! -z "$(RELEASE)" # RELEASE
+#		test ! -z "$(STAGING)" # STAGING
 		cat xmitmsgx.spec.in \
 		  | sed 's#%SPEC_PREFIX%#$(PREFIX)#g' \
 		  | sed 's#%SPEC_UNAMEM%#$(UNAMEM)#g' \
@@ -237,7 +251,29 @@ xmitmsgx.spec.in:
 		@echo "$(MAKE): you need $@"
 		wget $(SOURCEURL)/$@
 
+
+########################################################################
+# DEB support
+
+xmitmsgx.deb:   xmitmsgx.dctl
+		./debbuild.sh $(APPLID) $(VERSION)
+
+xmitmsgx.dctl:  xmitmsgx.dctl.in
+		grep -v '#' xmitmsgx.dctl.in \
+		  | sed 's#%SPEC_PREFIX%#$(PREFIX)#g' \
+		  | sed 's#%SPEC_APPLID%#$(APPLID)#g' \
+		  | sed 's#%SPEC_VERSION%#$(VERSION)#g' \
+		  | sed 's#%SPEC_RELEASE%#$(RELEASE)#g' \
+		  | sed 's#%SPEC_UNAMEM%#$(UNAMEM)#g' \
+		  | sed 's#%SPEC_STAGING%#$(STAGING)#g' \
+		  | sed 's#%SPEC_LOCDIR%#$(LOCDIR)#g' \
+		  | sed 's#%SPEC_LOCALE%#$(LOCALE)#g' \
+		  | uniq > xmitmsgx.dctl
+
 #
+########################################################################
+#
+
 makefile:	makefile.in
 		@echo "$(MAKE): makefile is out of synch"
 		@echo "$(MAKE): you need to re-run ./configure"
@@ -263,13 +299,19 @@ errno.msgs:
 
 # reset things for a fresh build from source
 clean:
-		rm -f *.o *.a *.so *.dylib *.rpm *.class \
+		rm -f *.o *.a *.so *.dylib *.rpm *.deb *.log *.class \
 			msgtest xmsgtest xfortune xmiterr xmitmsg xmmlogin \
-			xmitmsgx.spec xmmjava.h
-		rm -rf rpmbuild.d
+			xmitmsgx.spec xmitmsgx.dctl xmmjava.h
 
-distclean:      clean
-		@rm -f configure.h configure.sh xmmconfig.h xmmconfig.sh
+distclean:
+		rm -f *.o *.a *.so *.dylib *.rpm *.deb *.log *.class \
+			msgtest xmsgtest xfortune xmiterr xmitmsg xmmlogin \
+			xmitmsgx.spec xmitmsgx.dctl xmmjava.h
+		rm -rf rpmbuild.d debbuild.d
+		@rm -f configure.h configure.sh makefile.old \
+		  xmmconfig.h xmmconfig.sh
+		@rm -f com/casita com/xmitmsgx
+		@rm -f .rpmseq makefile
 
 veryclean:      distclean
 

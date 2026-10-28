@@ -11,8 +11,14 @@
 #ifndef _XMITMSGX_H
 #define _XMITMSGX_H
 
-/* xmitmsgx-2.1.5            v2            r1            m5           */
-#define  XMITMSGX_VERSION  (((2) << 24) + ((1) << 16) + ((5) << 8) + (0))
+/* xmitmsgx-2.3.2            v2            r3            m2           */
+#define  XMITMSGX_VERSION  (((2) << 24) + ((3) << 16) + ((2) << 8) + (0))
+/* version 2.3.1 adds initial support for 'XMITMSG' on VM/CMS         */
+/* version 2.2.9 adds xm_findfile() internal locale search function   */
+/* version 2.2.8 removes "extern" from prototype statements (below)   */
+/* version 2.2.7 includes a built-in SYSLOG place holder for Windows  */
+/* version 2.2.5 removes "unsigned char" for to build on IBM VM/CMS   */
+/*  ... but characters are NOT "signed" in practice anyway ... WCGW?  */
 
 /* priorities (these are ordered)                                     */
 /*      MSGLEVEL_DEBUG           LOG_DEBUG   7 debug-level messages, not used here */
@@ -23,6 +29,13 @@
 #define MSGLEVEL_SEVERE   'S' /* LOG_CRIT    2 critical conditions */
 #define MSGLEVEL_TERMINAL 'T' /* LOG_ALERT   1 action must be taken immediately */
 /*      MSGLEVEL_EMERG           LOG_EMERG   0 reserved */
+/*      MSGLEVEL_STDOUT   '*'                  print to stdout        */
+/*      MSGLEVEL_STDERR   '!'                  print to stderr        */
+
+#define MSGROUTE_DEFAULT     (1<<3)  /* user-generated messages */
+#define MSGROUTE_USER        (1<<3)  /* user-generated messages */
+#define MSGROUTE_FILE        (8<<3)  /* file transfer subsystem */
+#define MSGROUTE_PRINT       (6<<3)  /* printing subsystem */
 
 /* the following are used by derivative functions, not by xmmake() itself */
 #define  MSGFLAG_SYSLOG   0x01   /* used by xmopen() to enable logging */
@@ -40,53 +53,42 @@ typedef struct MSGSTRUCT
   {
     int  msgnum;                /* message number */
     int  msgc;                  /* count of replacement tokens */
-    unsigned char **msgv;       /* vector of replacement tokens */
-    unsigned char *msgbuf;      /* buffer supplied by caller */
+    char **msgv;       /* vector of replacement tokens */
+    char *msgbuf;      /* buffer supplied by caller */
     int  msglen;                /* buffer size on input, msg size on return */
-/* possible alignment                                                 */
-    unsigned char *msgtext;     /* offset past msg code/header */
-/* 40                                                                 */
+    char *msgtext;     /* offset past msg code/header */
 /* ints still only 4 bytes on 64-bit systems, though ptrs are 8 bytes */
-/* and don't forget about alignment                                   */
 
     int  msgfmt;        /* message format number (for future use) */
     int  msgline;       /* message line number (for future use, zero means all lines) */
     int  msglevel;      /* message level/serverity (zero means use the letter in the file) */
     int  msgopts;       /* set by xmopen(), sometimes overridden for xmmake() */
-/* 56                                                                 */
 
     /* the following are probably not for external use */
-    unsigned char *caller;       /* default is getenv("LOGNAME") roughly, msgu */
-    unsigned char *prefix;       /* default is applid[0..2]||caller[0..2] */
-    unsigned char *letter;       /* default taken from message file */
-/* 80                                                                 */
+    char *caller;       /* default is getenv("LOGNAME") roughly, msgu */
+    char *prefix;       /* default is applid[0..2]||caller[0..2] */
+    char *letter;       /* default taken from message file */
 
     /* the following are filled in by xmopen() not for external use */
     int  msgmax;                /* highest message number in table */
-/* possible alignment                                                 */
-    unsigned char **msgtable;   /* array of messages (allocated memory) */
-    unsigned char *msgdata;     /* messages file content (allocated memory) */
-    unsigned char *msgfile;     /* name of message file found (for reference and debugging) */
-    unsigned char *escape;      /* the escape character (for reference and debugging) */
-/* 120                                                                */
+    char **msgtable;   /* array of messages (allocated memory) */
+    char *msgdata;     /* messages file content (allocated memory) */
+    char *msgfile;     /* name of message file found (for reference and debugging) */
+    char *escape;      /* the escape character (for reference and debugging) */
 
-    unsigned char  pfxmaj[4];   /* truncated up-cased applid/major */
-    unsigned char  pfxmin[4];   /* truncated up-cased caller/minor */
-    unsigned char  locale[32];  /* possibly truncated to match the nearest file found */
-    unsigned char  applid[32];  /* default is basename of messages file, used as SYSLOG identity */
-/* 192                                                                */
+    char  pfxmaj[4];   /* truncated up-cased applid/major */
+    char  pfxmin[4];   /* truncated up-cased caller/minor */
+    char  locale[32];  /* possibly truncated to match the nearest file found */
+    char  applid[32];  /* default is basename of messages file, used as SYSLOG identity */
 
     int  version;               /* version of the library when struct is initialized */
-/* possible alignment                                                 */
     void *next;                 /* pointer to next in chain or NULL */
     void *prev;                 /* pointer to previous in chain (first is NULL) */
-    unsigned char  msgmagic[16];  /* filled-in with "MSGSTRUCT" when initialized */
-/* 232                                                                */
-
+    char  msgmagic[16];  /* filled-in with "MSGSTRUCT" when initialized */
   } MSGSTRUCT;        /* we will expand this struct for release 2.2.x */
 
 /* Open the messages file, read it, get ready for service. */
-extern int xmopen(unsigned char*,int,struct MSGSTRUCT*);
+int xmopen(char*,int,struct MSGSTRUCT*);
 /* args: filename, opts, MSGSTRUCT */
 /* calls xminit()                                                     */
 /* may call openlog(char*ident,int option,int facility)               */
@@ -94,28 +96,32 @@ extern int xmopen(unsigned char*,int,struct MSGSTRUCT*);
 /* specify a syslog facility via optional MSGSTRUCT */
 
 /* This is the heart of the utility. */
-extern int xmmake(struct MSGSTRUCT*);
+int xmmake(struct MSGSTRUCT*);
+/* args: MSGSTRUCT - provide all details via this DSECT */
 
 /* Print to stdout or stderr depending on level, optionally syslog. */
-extern int xmprint(int,int,unsigned char*[],int,struct MSGSTRUCT*);
-/* args: msgnum, msgc, msgv, opts */
+int xmprint(int,int,char**,int,struct MSGSTRUCT*);
+/* args: msgnum, msgc, msgv, opts, MSGSTRUCT */
 
 /* Write to file descriptor, optionally syslog. */
-extern int xmwrite(int,int,int,unsigned char*[],int,struct MSGSTRUCT*);
-/* args: fd, msgnum, msgc, msgv, opts */
+int xmwrite(int,int,int,char**,int,struct MSGSTRUCT*);
+/* args: fd, msgnum, msgc, msgv, opts, MSGSTRUCT */
 
 /* Generate a message and store it as a string. */
-extern int xmstring(unsigned char*,int,int,int,unsigned char*[],struct MSGSTRUCT*);
-/* args: output, outlen, msgnum, msgc, msgv */
+int xmstring(char*,int,int,int,char**,struct MSGSTRUCT*);
+/* args: output, outlen, msgnum, msgc, msgv, MSGSTRUCT */
 
 /* Clear the message repository struct. */
-extern int xmclose(struct MSGSTRUCT*);
+int xmclose(struct MSGSTRUCT*);
+/* args: MSGSTRUCT - allocations performed by xmopen() will be undone */
 /* calls xmquit()                                                     */
 /* may call closelog()                                                */
 
 /* internal functions */
-extern int xm_lev2pri(unsigned char*);
-extern int xm_negative(int);
+int xm_lev2pri(char*);
+int xm_negative(int);
+int xm_deliver(char*,int);
+int xm_make_cms(struct MSGSTRUCT*);
 
 #endif
 

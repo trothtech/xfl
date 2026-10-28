@@ -10,7 +10,6 @@
 APPLID          =       xfl
 VERSION         =       0.7.6
 
-#PROJECTURL     =       http://www.casita.net/pub/ductwork/src
 PROJECTURL      =       http://www.casita.net/pub/xfl/src
 LOCALE          =       en_US
 

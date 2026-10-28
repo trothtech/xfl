@@ -31,9 +31,9 @@ This is the stages source code directory for POSIX Pipelines
     count.c
     take.c              take (first or last) n records
     drop.c              drop (first or last) n records
-    filer.c             read a file
-    filew.c             write a file
-    filea.c             append to a file
+    filer.c             read a file (alias "<")
+    filew.c             write a file (alias ">")
+    filea.c             append to a file (alias ">>")
 
 ## Stages Defined in the Swift Implementation
 

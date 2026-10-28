@@ -4,72 +4,76 @@ This is the source directory for XFL, POSIX Pipelines
 
 ## Manifest
 
-    manifest                    this file
-    configure                   configurator script
++   manifest                    this file
++   configure                   configurator script
     configure.h                 generated
     configure.sh                generated
-    makefile.in                 skeleton makefile
++   makefile.in                 skeleton makefile
     makefile                    generated
+    rpmbuild.sh                 shell script for building RPMs
 
-    xfl.h                       header for the project, used by the launcher and all stages
-    xfl.msgs                    message catalog (compatible with CMS)
-    xfllib.c                    library for the project, for the launcher and all stages
-    pipe.c                      primary command (the launcher)
-    xmitmsgx.h                  generated
-    testfile.txt
-    xfl.spec.in
++   xfl.h                       header for the project, used by the launcher and all stages
++   xfl.msgs                    message catalog (compatible with CMS)
++   xfllib.c                    library for the project, for the launcher and all stages
++   pipe.c                      primary command (the launcher)
+    xmitmsgx.h                  generated (copied from sub-dir)
++   testfile.txt
++   xfl.spec.in
 
-    xmitmsgx/configure          configurator script for the message handler
++   xmitmsgx/configure          configurator script for the message formatter
     xmitmsgx/configure.h        generated
     xmitmsgx/configure.sh       generated
-    xmitmsgx/makefile.in        skeleton makefile for the message handler
++   xmitmsgx/makefile.in        skeleton makefile for the message formatter
     xmitmsgx/makefile           generated
-    xmitmsgx/xmitmsgx.c         library for the message handler
-    xmitmsgx/xmitmsgx.h         header for the message handler
++   xmitmsgx/xmitmsgx.c         library for the message formatter
++   xmitmsgx/xmitmsgx.h         header for the message formatter
+    xmitmsgx/xmmwin.c           improved Windows interface for the message formatter
+    xmitmsgx/xmmwin.h           improved Windows interface for the message formatter
+    xmitmsgx/xmmshim.exec       support for message formatter on VM/CMS
 
     stages/                     see stages/manifest
-    stages/manifest             list of files providing stages
-    stages/configure            configurator script for the stages
++   stages/manifest             list of files providing stages
++   stages/configure            configurator script for the stages
     stages/configure.h          generated
     stages/configure.sh         generated
-    stages/makefile.in          skeleton makefile for the stages
++   stages/makefile.in          skeleton makefile for the stages
     stages/makefile             generated
 
-    stages/buffer.c             BUFFER stage holds all records until end-of-input
-    stages/console.c            read from stdin if first, write to stdout otherwise
-    stages/cons.c               alias for CONSOLE stage
-    stages/elastic.c
-    stages/reverse.c
-    stages/literal.c            prepend a record to the stream with the literal string supplied
-    stages/strliteral.c         prepend a record to the stream with the literal string supplied
-    stages/fanin.c              gather inputs one at a time
-    stages/command.c            issue commands to the local operating system
-    stages/cp.c                 issue a CP or VMCP command (requires z/VM)
-    stages/cms.c                N/A apart from VM/CMS
-    stages/locate.c             find a needle in a haystack
-    stages/nlocate.c            exclude a needle from a haystack
-    stages/var.c                read a variable from the environment
-    stages/hole.c
-    stages/count.c
-    stages/take.c               take (first or last) n records
-    stages/drop.c               drop (first or last) n records
-    stages/filer.c              read a file
-    stages/filew.c              write a file
-    stages/filea.c              append to a file
++   stages/buffer.c             BUFFER stage holds all records until end-of-input
++   stages/console.c            read from stdin if first, write to stdout otherwise
++   stages/cons.c               alias for CONSOLE stage
++   stages/elastic.c
++   stages/reverse.c
++   stages/literal.c            prepend a record to the stream with the literal string supplied
++   stages/strliteral.c         prepend a record to the stream with the literal string supplied
++   stages/fanin.c              gather inputs one at a time
++   stages/command.c            issue commands to the local operating system
++   stages/cp.c                 issue a CP or VMCP command (requires z/VM)
++   stages/cms.c                N/A apart from VM/CMS
++   stages/locate.c             find a needle in a haystack
++   stages/nlocate.c            exclude a needle from a haystack
++   stages/var.c                read a variable from the environment
++   stages/hole.c
++   stages/count.c
++   stages/take.c               take (first or last) n records
++   stages/drop.c               drop (first or last) n records
++   stages/filer.c              read a file
++   stages/filew.c              write a file
++   stages/filea.c              append to a file
 
 # Rexx support
 
-    xflrexx.c                   Rexx interface shim
-    rxstage.rx                  a sample stage written in Rexx
-    rxsample.sh                 Rexx demonstration script
++   xflrexx.c                   Rexx interface shim
++   rxstage.rx                  a sample stage written in Rexx
++   rxsample.sh                 Rexx demonstration script
 
 # COBOL support
 
-    cobstage.cob                sample stage written in COBOL
-    cobsample.sh                COBOL demonstration script
++   cobstage.cob                sample stage written in COBOL
++   cobsample.sh                COBOL demonstration script
 
 # Java support
 
-    xfljava.c
++   xfljava.c
 
 
